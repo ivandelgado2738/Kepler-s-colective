@@ -1,19 +1,5 @@
 #include <math.h>
-struct Vector3D {
-    float x, y, z;
-};
-
-struct Triangle {
-    Vector3D v1, v2, v3;
-};
-
-struct Matrix3x3 {
-    float m[3][3];
-};
-
-struct Matrix4x4 {
-    float m[4][4];
-};
+#include "algebra.hpp"
 
 float vectorNorm(Vector3D v) {
     return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -82,7 +68,7 @@ float signedTetrahedronVolume (Vector3D v, Triangle t){
 };
 
 bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
-    float i,j,k;
+    int i,j,k;
     Triangle t1, t2, t3;
     t1 = {t.v1, Q1, t.v2};
     t2 = {t.v3, t.v2, Q1};
