@@ -5,10 +5,10 @@ Triangle readPolyhedron (FILE * s){
     //
 };
 
-void readPosition (FILE *f, float &latitude, float &longitude){
+void readPosition (FILE *f, double &latitude, double &longitude){
     //read position from file f and store it in latitude and longitude
 };
 
-float readAltitude (FILE *f, float latitude, float longitude){
+double readAltitude (FILE *f, double latitude, double longitude){
     //read altiude from file f at the given latitude and longitude
 };

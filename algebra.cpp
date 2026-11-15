@@ -1,11 +1,11 @@
 #include <math.h>
 #include "algebra.hpp"
 
-float vectorNorm(Vector3D v) {
+double vectorNorm(Vector3D v) {
     return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 };
 
-float vectorDotProduct(Vector3D v1, Vector3D v2) {
+double vectorDotProduct(Vector3D v1, Vector3D v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 };
 
@@ -18,7 +18,7 @@ Vector3D vectorSubstraction(Vector3D v1, Vector3D v2) {
     return {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
 };
 
-Vector3D productByScalar(Vector3D v, float scalar) {
+Vector3D productByScalar(Vector3D v, double scalar) {
     return {v.x * scalar, v.y * scalar, v.z * scalar};
 };
 
@@ -29,19 +29,19 @@ Vector3D vectorCrossProduct(Vector3D v1, Vector3D v2) {
 };
 
 Vector3D normalize(Vector3D v) {
-    float norm = vectorNorm(v);
+    double norm = vectorNorm(v);
     return {v.x / norm, v.y / norm, v.z / norm};
 };
 
 
-float determinant3x3(Matrix3x3 m) {
+double determinant3x3(Matrix3x3 m) {
     return m.m[0][0] * (m.m[1][1] * m.m[2][2] - m.m[1][2] * m.m[2][1]) -
            m.m[0][1] * (m.m[1][0] * m.m[2][2] - m.m[1][2] * m.m[2][0]) +
            m.m[0][2] * (m.m[1][0] * m.m[2][1] - m.m[1][1] * m.m[2][0]);
 };
 
-float determinant4x4(Matrix4x4 m) {
-    float det = 0.0f;
+double determinant4x4(Matrix4x4 m) {
+    double det = 0.0f;
     for (int i = 0; i < 4; ++i) {
         Matrix3x3 subMatrix;
         for (int j = 1; j < 4; ++j) {
@@ -64,13 +64,13 @@ Vector3D normalVectorTriangle(Triangle t) {
     return normalize(normal);
 };
 
-int sign(float f){
+int sign(double f){
     if(f < 0) return -1;
     if(f > 0) return 1;
     return 0;   
 };
 
-float signedTetrahedronVolume (Vector3D v, Triangle t){
+double signedTetrahedronVolume (Vector3D v, Triangle t){
     Matrix4x4 m;
     m.m[0][0] = v.x; m.m[0][1] = v.y; m.m[0][2] = v.z; m.m[0][3] = 1.0f;
     m.m[1][0] = t.v1.x; m.m[1][1] = t.v1.y; m.m[1][2] = t.v1.z; m.m[1][3] = 1.0f;
@@ -98,22 +98,22 @@ bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
 };
 
 Vector3D cartesianToSpherical(Vector3D v) {
-    float r = vectorNorm(v);
-    float theta = acos(v.z / r); // polar angle (rad)
-    float phi = atan2(v.y, v.x); // azimuthal angle (rad)
+    double r = vectorNorm(v);
+    double theta = acos(v.z / r); // polar angle (rad)
+    double phi = atan2(v.y, v.x); // azimuthal angle (rad)
     return {r, theta, phi};
 };
 
 Vector3D sphericalToCartesian(Vector3D v) {
-    float r = v.x;
-    float theta = v.y; // polar angle (rad)
-    float phi = v.z; // azimuthal angle (rad)
+    double r = v.x;
+    double theta = v.y; // polar angle (rad)
+    double phi = v.z; // azimuthal angle (rad)
     return {r * sin(theta) * cos(phi), r * sin(theta) * sin(phi), r * cos(theta)};
 };
 
-Vector3D latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude) {
-    float latRad = latitude * M_PI / 180.0f;
-    float lonRad = longitude * M_PI / 180.0f;
-    float R = altitude; // Altitude = distance from moon center
+Vector3D latitudeLongitudeAltitudeToCartesian(double latitude, double longitude, double altitude) {
+    double latRad = latitude * M_PI / 180.0f;
+    double lonRad = longitude * M_PI / 180.0f;
+    double R = altitude; // Altitude = distance from moon center
     return {R * cos(latRad) * cos(lonRad), R * cos(latRad) * sin(lonRad), R * sin(latRad)};
 };

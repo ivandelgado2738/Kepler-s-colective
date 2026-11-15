@@ -2,6 +2,7 @@
 #include "algebra.hpp"
 #include "illumination.hpp"
 #include "polyhedron.hpp"
+#include <stdio.h>
 
 #define nyears 11
 #define ndaysperyear 365
@@ -18,7 +19,7 @@ int main(){
     int i;
     int Nsides;
     Triangle polyhedron = readPolyhedron(h);
-    float latitude, longitude, altitude;
+    double latitude, longitude, altitude;
     readPosition(g, latitude, longitude);
     altitude = readAltitude(g, latitude, longitude);
     Vector3D MoonPosition = latitudeLongitudeAltitudeToCartesian(latitude, longitude, altitude);
@@ -27,19 +28,19 @@ int main(){
     fprintf(res, "Time (s)\tRelative Illumination\tCommunication (1=clear, 0=blocked)\n");
 
     for(i = 0; i < nyears * ndaysperyear * nrowsperday; i++){
-        float time;
+        double time;
 
         char * date;
 
-        Vector3D SunPosition, EarthPosition, MoonPosition;
+        Vector3D SunPosition, EarthPosition;
 
-        fscanf(f, "%f %s %f %f %f %f %f %f", &time, &date,
+        fscanf(f, "%lf %s %lf %lf %lf %lf %lf %lf", &time, &date,
                &EarthPosition.x, &EarthPosition.y, &EarthPosition.z,
                &SunPosition.x, &SunPosition.y, &SunPosition.z
                );
 
-        float illuminationValue = illumination(SunPosition, MoonPosition, polyhedron, Nsides);
-        float communicationValue = communication(EarthPosition, MoonPosition, polyhedron, Nsides);
+        double illuminationValue = illumination(SunPosition, MoonPosition, polyhedron, Nsides);
+        double communicationValue = communication(EarthPosition, MoonPosition, polyhedron, Nsides);
 
         fprintf(res, "%.2f\t%.6f\t%.1f\n", time, illuminationValue, communicationValue);
     };

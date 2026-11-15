@@ -4,7 +4,7 @@
 
 using namespace std;
 
-float illuminationAngle(Vector3D lightDirection, Triangle t) {
+double illuminationAngle(Vector3D lightDirection, Triangle t) {
     return abs(acos(vectorDotProduct(lightDirection, normalVectorTriangle(t))));
 };
 
@@ -18,10 +18,10 @@ bool intersectsPolyhedron(Vector3D Q1, Vector3D Q2, Triangle polyhedron[], int n
 };
 
 //We assume that polyhedron[0] is the face that the base is standing on
-float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
+double illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
     Vector3D lightDirection = {SunPosition.x - MoonPosition.x, SunPosition.y - MoonPosition.y, SunPosition.z - MoonPosition.z};
     lightDirection = normalize(lightDirection);
-    float angle = illuminationAngle(lightDirection, polyhedron[0]);
+    double angle = illuminationAngle(lightDirection, polyhedron[0]);
     // Elevate the MoonPosition slightly along the normal of the triangle to avoid being illuminated
     // when it is actually in shadow. If the segment intersects polyhedron[0], then the communication is blocked.
     Vector3D elevatedMoonPosition;
@@ -34,11 +34,11 @@ float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhed
     if (intersectsPolyhedron(elevatedMoonPosition, SunPosition, polyhedron, numTriangles)) {
         return 0.0f; // Shadowed
     } else {
-        return angle; // Illuminated
+        return cos(angle); // Illuminated
     }
 };
 
-float communication(Vector3D EarthPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
+double communication(Vector3D EarthPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
     Vector3D elevatedMoonPosition;
     Vector3D communicationDirection = {EarthPosition.x - MoonPosition.x, EarthPosition.y - MoonPosition.y, EarthPosition.z - MoonPosition.z};
     communicationDirection = normalize(communicationDirection);
