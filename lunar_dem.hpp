@@ -6,7 +6,7 @@
 //
 //   - Un solo header, C++14 o superior, SIN dependencias (ni GDAL ni libtiff).
 //   - Soporta TIFF y BigTIFF, en tiles o en strips, sin comprimir / LZW / Deflate,
-//     predictor 1, 2 y 3, little y big endian, float32/float64/int/uint.
+//     predictor 1, 2 y 3, little y big endian, double32/double64/int/uint.
 //   - Solo descomprime los bloques que tocan la region pedida (el archivo de
 //     3,3 GB nunca se carga entero).
 //
@@ -72,12 +72,12 @@ struct Parche {
     long long fila0 = 0, col0 = 0;    // pixel del raster del nodo (0,0)
     int paso_px = 1;                  // pixeles del raster entre nodos
 
-    std::vector<float> h;   // altura [m] sobre la esfera de 1737.4 km; NaN = sin dato
+    std::vector<double> h;   // altura [m] sobre la esfera de 1737.4 km; NaN = sin dato
     std::vector<Vec3> xyz;  // posicion MOON_ME [m]; NaN si no hay dato
 
     std::size_t idx(int i, int j) const { return std::size_t(i) * std::size_t(cols) + std::size_t(j); }
     bool valido(int i, int j) const { return !std::isnan(h[idx(i, j)]); }
-    float altura(int i, int j) const { return h[idx(i, j)]; }
+    double altura(int i, int j) const { return h[idx(i, j)]; }
     const Vec3& punto(int i, int j) const { return xyz[idx(i, j)]; }
 
     // 2 triangulos por celda. Orden de vertices antihorario visto desde fuera de
@@ -424,13 +424,13 @@ public:
     }
 
     // Altura [m] del pixel mas cercano a (lat, lon). NaN si no hay dato.
-    float altura(double lat_deg, double lon_deg) { return region_latlon(lat_deg, lon_deg, 0.0).h[0]; }
+    double altura(double lat_deg, double lon_deg) { return region_latlon(lat_deg, lon_deg, 0.0).h[0]; }
 
     // Resumen legible de lo que hay en el archivo (para comprobar que cuadra)
     std::string info() const {
         char b[1024];
         const char* comp = comp_ == 1 ? "ninguna" : comp_ == 5 ? "LZW" : "Deflate";
-        const char* fmt = fmt_ == 3 ? "float" : fmt_ == 2 ? "int" : "uint";
+        const char* fmt = fmt_ == 3 ? "double" : fmt_ == 2 ? "int" : "uint";
         std::snprintf(b, sizeof b,
                       "Raster: %lld x %lld px, %s%d, %s\n"
                       "Bloques: %s de %lld x %lld px, compresion %s, predictor %d\n"
@@ -451,7 +451,7 @@ private:
     bool le_ = true, big_ = false, swap_ = false;
     long long W_ = 0, H_ = 0;
     int bps_ = 0;      // bytes por muestra
-    int fmt_ = 1;      // 1 uint, 2 int, 3 float
+    int fmt_ = 1;      // 1 uint, 2 int, 3 double
     int comp_ = 1;     // 1 ninguna, 5 LZW, 8 Deflate
     int pred_ = 1;     // 1 ninguno, 2 horizontal, 3 coma flotante
     bool tiled_ = false;
@@ -485,7 +485,7 @@ private:
                 case 17: v[i] = double(static_cast<std::int64_t>(entero<std::uint64_t>(d + 8 * i, le_))); break;
                 case 11: {
                     const std::uint32_t u = entero<std::uint32_t>(d + 4 * i, le_);
-                    float f;
+                    double f;
                     std::memcpy(&f, &u, 4);
                     v[i] = f;
                     break;
@@ -692,10 +692,10 @@ private:
 
     // ---- muestras -------------------------------------------------------------
     // p apunta a una muestra en orden de bytes NATIVO
-    float muestra(const unsigned char* p) const {
+    double muestra(const unsigned char* p) const {
         double v;
         switch (fmt_ * 10 + bps_) {
-            case 34: { float f; std::memcpy(&f, p, 4); if (hay_nodata_ && f == float(nodata_)) return NAN_F(); return f; }
+            case 34: { double f; std::memcpy(&f, p, 4); if (hay_nodata_ && f == double(nodata_)) return NAN_F(); return f; }
             case 38: { std::memcpy(&v, p, 8); break; }
             case 11: v = *p; break;
             case 12: { std::uint16_t u; std::memcpy(&u, p, 2); v = u; break; }
@@ -706,9 +706,9 @@ private:
             default: return NAN_F();
         }
         if (hay_nodata_ && v == nodata_) return NAN_F();
-        return float(v);
+        return double(v);
     }
-    static float NAN_F() { return std::numeric_limits<float>::quiet_NaN(); }
+    static double NAN_F() { return std::numeric_limits<double>::quiet_NaN(); }
 
     void invertir_muestras(unsigned char* p, std::size_t n) const {
         if (bps_ == 1) return;

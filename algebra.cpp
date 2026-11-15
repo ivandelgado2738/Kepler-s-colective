@@ -1,11 +1,11 @@
 #include <math.h>
 #include "algebra.hpp"
 
-float vectorNorm(lunar::Vec3 v) {
+double vectorNorm(lunar::Vec3 v) {
     return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 };
 
-float vectorDotProduct(lunar::Vec3 v1, lunar::Vec3 v2) {
+double vectorDotProduct(lunar::Vec3 v1, lunar::Vec3 v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 };
 
@@ -18,7 +18,7 @@ lunar::Vec3 vectorSubstraction(lunar::Vec3 v1, lunar::Vec3 v2) {
     return {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
 };
 
-lunar::Vec3 productByScalar(lunar::Vec3 v, float scalar) {
+lunar::Vec3 productByScalar(lunar::Vec3 v, double scalar) {
     return {v.x * scalar, v.y * scalar, v.z * scalar};
 };
 
@@ -29,19 +29,19 @@ lunar::Vec3 vectorCrossProduct(lunar::Vec3 v1, lunar::Vec3 v2) {
 };
 
 lunar::Vec3 normalize(lunar::Vec3 v) {
-    float norm = vectorNorm(v);
+    double norm = vectorNorm(v);
     return {v.x / norm, v.y / norm, v.z / norm};
 };
 
 
-float determinant3x3(Matrix3x3 m) {
+double determinant3x3(Matrix3x3 m) {
     return m.m[0][0] * (m.m[1][1] * m.m[2][2] - m.m[1][2] * m.m[2][1]) -
            m.m[0][1] * (m.m[1][0] * m.m[2][2] - m.m[1][2] * m.m[2][0]) +
            m.m[0][2] * (m.m[1][0] * m.m[2][1] - m.m[1][1] * m.m[2][0]);
 };
 
-float determinant4x4(Matrix4x4 m) {
-    float det = 0.0f;
+double determinant4x4(Matrix4x4 m) {
+    double det = 0.0f;
     for (int i = 0; i < 4; ++i) {
         Matrix3x3 subMatrix;
         for (int j = 1; j < 4; ++j) {
@@ -64,13 +64,13 @@ lunar::Vec3 normalVectorTriangle(Triangle t) {
     return normalize(normal);
 };
 
-int sign(float f){
+int sign(double f){
     if(f < 0) return -1;
     if(f > 0) return 1;
     return 0;   
 };
 
-float signedTetrahedronVolume (lunar::Vec3 v, Triangle t){
+double signedTetrahedronVolume (lunar::Vec3 v, Triangle t){
     Matrix4x4 m;
     m.m[0][0] = v.x; m.m[0][1] = v.y; m.m[0][2] = v.z; m.m[0][3] = 1.0f;
     m.m[1][0] = t.v1.x; m.m[1][1] = t.v1.y; m.m[1][2] = t.v1.z; m.m[1][3] = 1.0f;
@@ -95,22 +95,22 @@ bool intersectsTriangle(lunar::Vec3 Q1, lunar::Vec3 Q2,Triangle t) {
 };
 
 lunar::Vec3 cartesianToSpherical(lunar::Vec3 v) {
-    float r = vectorNorm(v);
-    float theta = acos(v.z / r); // polar angle (rad)
-    float phi = atan2(v.y, v.x); // azimuthal angle (rad)
+    double r = vectorNorm(v);
+    double theta = acos(v.z / r); // polar angle (rad)
+    double phi = atan2(v.y, v.x); // azimuthal angle (rad)
     return {r, theta, phi};
 };
 
 lunar::Vec3 sphericalToCartesian(lunar::Vec3 v) {
-    float r = v.x;
-    float theta = v.y; // polar angle (rad)
-    float phi = v.z; // azimuthal angle (rad)
+    double r = v.x;
+    double theta = v.y; // polar angle (rad)
+    double phi = v.z; // azimuthal angle (rad)
     return {r * sin(theta) * cos(phi), r * sin(theta) * sin(phi), r * cos(theta)};
 };
 
-lunar::Vec3 latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude) {
-    float latRad = latitude * M_PI / 180.0f;
-    float lonRad = longitude * M_PI / 180.0f;
-    float r = 1737.4f + altitude; // Moon's radius in km + altitude
+lunar::Vec3 latitudeLongitudeAltitudeToCartesian(double latitude, double longitude, double altitude) {
+    double latRad = latitude * M_PI / 180.0f;
+    double lonRad = longitude * M_PI / 180.0f;
+    double r = 1737.4f + altitude; // Moon's radius in km + altitude
     return {r * cos(latRad) * cos(lonRad), r * cos(latRad) * sin(lonRad), r * sin(latRad)};
 };
