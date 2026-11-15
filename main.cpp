@@ -14,15 +14,15 @@
 
 using namespace std;
 
-vector<Triangle> trianglesFromPatch(const lunar::Parche& parche) {
+vector<Triangle> trianglesFromPatch(const lunar::Patch& patch) {
     vector<Triangle> polyhedron;
-    vector<lunar::Triangulo> triangulos = parche.triangulos();
-    polyhedron.reserve(triangulos.size());
-    for (const lunar::Triangulo& triangulo : triangulos) {
+    vector<lunar::Triangle> triangles = patch.triangles();
+    polyhedron.reserve(triangles.size());
+    for (const lunar::Triangle& triangle : triangles) {
         polyhedron.push_back({
-            parche.xyz[triangulo.a],
-            parche.xyz[triangulo.b],
-            parche.xyz[triangulo.c]
+            patch.xyz[triangle.a],
+            patch.xyz[triangle.b],
+            patch.xyz[triangle.c]
         });
     }
     return polyhedron;
@@ -42,13 +42,15 @@ int main(){
     };
     lunar::Dem dem("ldem_87s_5mpp.tif");
 
-    lunar::Parche parche = dem.region_latlon(lat, lon, 1000.0, 1);
+    lunar::Patch patch = dem.region_lat_lon(lat, lon, 1000.0, 1);
 
-    lunar::Vec3 MoonPosition = parche.punto(parche.filas/2, parche.cols/2);
+    lunar::Vec3 MoonPosition = patch.point(patch.rows/2, patch.columns/2);
 
-    vector<Triangle> triangulos = trianglesFromPatch(parche);
+    vector<Triangle> triangles = trianglesFromPatch(patch);
 
-    int Ntriangulos = triangulos.size();
+    //AQUÍ HAY QUE HACER QUE triangles [0] SEA LA CARA EN LA QUE ESTAMOS
+
+    int triangleCount = triangles.size();
 
     for(int i = 0; i < nyears * ndaysperyear * nrowsperday; i++){
         double time;
@@ -65,8 +67,8 @@ int main(){
             EarthPosition = productByScalar(EarthPosition, 1000.0f);
             SunPosition = productByScalar(SunPosition, 1000.0f); //We write the coordinates in meters
 
-            double illuminationValue = illumination(SunPosition, MoonPosition, triangulos, Ntriangulos);
-            double communicationValue = communication(EarthPosition, MoonPosition, triangulos, Ntriangulos);
+            double illuminationValue = illumination(SunPosition, MoonPosition, triangles, triangleCount);
+            double communicationValue = communication(EarthPosition, MoonPosition, triangles, triangleCount);
 
             fprintf(res, "%.2f\t%.6f\t%.1f\n", time, illuminationValue, communicationValue);
         
