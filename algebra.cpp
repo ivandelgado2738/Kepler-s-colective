@@ -81,11 +81,14 @@ float signedTetrahedronVolume (Vector3D v, Triangle t){
 };
 
 bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
-    int i,j,k;
+    int i,j,k,s1,s2;
     Triangle t1, t2, t3;
     t1 = {t.v1, Q1, t.v2};
     t2 = {t.v3, t.v2, Q1};
     t3 = {t.v1, t.v3, Q1};
+    s1 = sign(signedTetrahedronVolume(Q1, t));
+    s2 = sign(signedTetrahedronVolume(Q2, t));
+    if(s1*s2  > 0) return false;
     i = sign(signedTetrahedronVolume(Q2, t1));
     j = sign(signedTetrahedronVolume(Q2, t2));
     k = sign(signedTetrahedronVolume(Q2, t3));
@@ -106,4 +109,11 @@ Vector3D sphericalToCartesian(Vector3D v) {
     float theta = v.y; // polar angle (rad)
     float phi = v.z; // azimuthal angle (rad)
     return {r * sin(theta) * cos(phi), r * sin(theta) * sin(phi), r * cos(theta)};
+};
+
+Vector3D latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude) {
+    float latRad = latitude * M_PI / 180.0f;
+    float lonRad = longitude * M_PI / 180.0f;
+    float R = altitude; // Altitude = distance from moon center
+    return {R * cos(latRad) * cos(lonRad), R * cos(latRad) * sin(lonRad), R * sin(latRad)};
 };

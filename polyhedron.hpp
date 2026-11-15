@@ -1,3 +1,7 @@
 #include "algebra.hpp"
 
-Triangle* readPolyhedron (char * s);
+Triangle readPolyhedron (FILE * s);
+
+void readPosition (FILE *f, float &latitude, float &longitude);
+
+float readAltitude (FILE *f, float latitude, float longitude);

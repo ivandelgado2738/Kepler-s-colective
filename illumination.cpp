@@ -19,9 +19,11 @@ bool intersectsPolyhedron(Vector3D Q1, Vector3D Q2, Triangle polyhedron[], int n
 
 //We assume that polyhedron[0] is the face that the base is standing on
 float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
-    Vector3D lightDirection = normalize({SunPosition.x - MoonPosition.x, SunPosition.y - MoonPosition.y, SunPosition.z - MoonPosition.z});
+    Vector3D lightDirection = {SunPosition.x - MoonPosition.x, SunPosition.y - MoonPosition.y, SunPosition.z - MoonPosition.z};
+    lightDirection = normalize(lightDirection);
     float angle = illuminationAngle(lightDirection, polyhedron[0]);
-    // Elevate the MoonPosition slightly along the normal of the triangle to avoid being illuminated by the Sun when it is actually in shadow
+    // Elevate the MoonPosition slightly along the normal of the triangle to avoid being illuminated
+    // when it is actually in shadow. If the segment intersects polyhedron[0], then the communication is blocked.
     Vector3D elevatedMoonPosition;
     if(sign(vectorDotProduct(normalVectorTriangle(polyhedron[0]), lightDirection)) < 0) {
         elevatedMoonPosition = vectorAddition(MoonPosition, productByScalar(normalVectorTriangle(polyhedron[0]), 0.01f));
@@ -37,7 +39,18 @@ float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhed
 };
 
 float communication(Vector3D EarthPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
-    if (intersectsPolyhedron(MoonPosition, EarthPosition, polyhedron, numTriangles)) {
+    Vector3D elevatedMoonPosition;
+    Vector3D communicationDirection = {EarthPosition.x - MoonPosition.x, EarthPosition.y - MoonPosition.y, EarthPosition.z - MoonPosition.z};
+    communicationDirection = normalize(communicationDirection);
+    // Elevate the MoonPosition slightly along the normal of the triangle to avoid being illuminated
+    // when it is actually in shadow. If the segment intersects polyhedron[0], then the communication is blocked.
+    if(sign(vectorDotProduct(normalVectorTriangle(polyhedron[0]), communicationDirection)) < 0) {
+        elevatedMoonPosition = vectorAddition(MoonPosition, productByScalar(normalVectorTriangle(polyhedron[0]), 0.01f));
+    }
+    else {
+        elevatedMoonPosition = vectorSubstraction(MoonPosition, productByScalar(normalVectorTriangle(polyhedron[0]), 0.01f));
+    };
+    if (intersectsPolyhedron(elevatedMoonPosition, EarthPosition, polyhedron, numTriangles)) {
         return 0.0f; // Blocked
     } else {
         return 1.0f; // Clear line of sight

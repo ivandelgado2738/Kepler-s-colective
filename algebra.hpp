@@ -45,3 +45,5 @@ bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t);
 Vector3D cartesianToSpherical(Vector3D v);
 
 Vector3D sphericalToCartesian(Vector3D v);
+
+Vector3D latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude);
