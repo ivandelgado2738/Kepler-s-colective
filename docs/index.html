@@ -2723,57 +2723,104 @@ body.modo-fotofobia .bridge-concept-box {
 body.modo-fotofobia .search-feedback-toast,
 body.modo-fotofobia .top-fechas-panel h4,
 body.modo-fotofobia .bridge-head h4,
-body.modo-fotofobia .bridge-concept-box .pro-ref {
+body.modo-fotofobia .bridge-concept-box .pro-ref,
+body.modo-fotofobia .lupa-control-head,
+body.modo-fotofobia .lupa-control-head strong,
+body.modo-fotofobia .filter-row-head,
+body.modo-fotofobia .filter-row-head strong,
+body.modo-fotofobia .bar-row strong,
+body.modo-fotofobia .curiosidad-body,
+body.modo-fotofobia .booking-desc,
+body.modo-fotofobia .adaptation-category-card p,
+body.modo-fotofobia .student-pillar p,
+body.modo-fotofobia .kid-desc-box p,
+body.modo-fotofobia .section-heading p,
+body.modo-fotofobia .drawer-body p,
+body.modo-fotofobia .drawer-body label,
+body.modo-fotofobia .drawer-body strong,
+body.modo-fotofobia #panelAdaptaciones,
+body.modo-fotofobia #panelAdaptaciones summary,
+body.modo-fotofobia #panelAdaptaciones .summary-toggle-pill {
   color: var(--nasa-white) !important;
 }
 
+body.modo-fotofobia .lupa-control-box {
+  background-color: var(--nasa-horizon);
+  border-color: var(--nasa-sky);
+}
+
+body.modo-fotofobia .lupa-mini-btn,
+body.modo-fotofobia .a11y-subtab-btn,
+body.modo-fotofobia .btn-outline-blue {
+  background-color: var(--nasa-navy);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-sky);
+}
+
+body.modo-fotofobia .a11y-subtab-btn.active {
+  background-color: var(--nasa-red);
+  border-color: var(--nasa-red);
+  color: var(--nasa-white) !important;
+}
+
+body.modo-fotofobia .a11y-btn.active {
+  background-color: var(--nasa-blue);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-white);
+}
+
+body.modo-fotofobia input[type="number"],
+body.modo-fotofobia input[type="datetime-local"],
+body.modo-fotofobia select {
+  background-color: var(--nasa-deep);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-sky);
+}
+
 /* ============================================================================
-   TABULACIONES Y SANGRÍAS ESTRUCTURALES (Jerarquía visual limpia)
+   ALINEACIÓN LIMPIA Y ENCUADRE EQUILIBRADO
    ============================================================================ */
 .drawer-body {
-  padding: 18px 24px 22px 28px;
+  padding: 16px 22px 20px;
 }
 
 .filter-group {
   padding-left: 14px;
   border-left: 3px solid var(--nasa-ice);
-  margin-left: 2px;
+  margin-left: 0;
 }
 
-.filter-group > h3 {
-  margin-left: -14px;
-  padding-left: 10px;
-}
-
+.filter-group > h3,
 .filter-group .filter-row,
 .filter-group .filter-hint,
 .filter-group .mode-tabs-inline {
-  margin-left: 6px;
+  margin-left: 0;
 }
 
 .adaptation-category-card .a11y-btn-stack,
 .adaptation-category-card .lupa-control-box {
-  margin-left: 8px;
+  margin-left: 0;
 }
 
 .kid-desc-box,
 .bridge-concept-box,
 .student-pillar {
-  padding-left: 18px;
+  padding-left: 16px;
   border-left: 4px solid var(--nasa-blue);
 }
 
 .curiosidad-content p.curiosidad-body,
 .booking-card-info .booking-desc {
-  padding-left: 10px;
-  border-left: 2px solid var(--border-soft);
+  padding-left: 0;
+  border-left: none;
+  text-align: left;
 }
 
 .section-container ul,
 .section-container ol,
 .drawer-body ul,
 .drawer-body ol {
-  padding-left: 26px;
+  padding-left: 22px;
   margin-top: 6px;
   margin-bottom: 10px;
   line-height: 1.55;
@@ -2781,6 +2828,14 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
 
 body.modo-fotofobia .filter-group {
   border-left-color: var(--nasa-horizon);
+}
+
+@media (min-width: 1120px) {
+  .hero-inner,
+  .section-container {
+    padding-left: 140px;
+    padding-right: 28px;
+  }
 }
 
 /* ============================================================================
@@ -2896,6 +2951,44 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
   gap: 10px;
 }
 
+.a11y-subtabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.a11y-subtab-btn {
+  border: 1.5px solid var(--border-soft);
+  background-color: var(--bg-subtle);
+  color: var(--nasa-navy);
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 7px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.a11y-subtab-btn:hover {
+  border-color: var(--nasa-blue);
+}
+
+.a11y-subtab-btn.active {
+  background-color: var(--nasa-blue);
+  border-color: var(--nasa-blue);
+  color: var(--nasa-white);
+}
+
+#panelAdaptaciones .adaptation-category-card {
+  display: none;
+}
+
+#panelAdaptaciones .adaptation-category-card.active {
+  display: block;
+}
+
 @media (max-width: 720px) {
   .a11y-drawer-wrapper {
     top: auto;
@@ -2982,26 +3075,31 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
       </summary>
 
       <div class="drawer-body">
+        <div class="a11y-subtabs" role="tablist" aria-label="Subniveles de Adaptaciones">
+          <button type="button" id="tabA11yNivel" class="a11y-subtab-btn active" data-a11y-tab="nivel" role="tab" aria-selected="true">🎓 Nivel</button>
+          <button type="button" id="tabA11yVisual" class="a11y-subtab-btn" data-a11y-tab="visual" role="tab" aria-selected="false">👁️ Visual</button>
+          <button type="button" id="tabA11yNeuro" class="a11y-subtab-btn" data-a11y-tab="neuro" role="tab" aria-selected="false">🧠 Neuro</button>
+        </div>
         <div class="adaptations-grid">
-          <div class="adaptation-category-card">
-            <h3>🎓 1. Nivel de Conocimiento y Gráficas</h3>
-            <p>Cambia todos los nombres, descripciones, controles y precisión de las gráficas.</p>
+          <div class="adaptation-category-card active" data-a11y-panel="nivel">
+            <h3>🎓 1. Nivel Académico y Gráficas</h3>
+            <p>Cambia nombres, descripciones, controles y precisión de las gráficas.</p>
             <div class="a11y-btn-stack">
               <button type="button" id="cardNivelEstudiante" class="a11y-btn">
-                <span>🌱 <strong>Modo Niño / Estudiante</strong> (Sin tecnicismos + Descripciones)</span>
+                <span>🌱 <strong>Modo Niño / Estudiante</strong> (Sin tecnicismos)</span>
               </button>
               <button type="button" id="cardNivelEstandar" class="a11y-btn active">
-                <span>🚀 <strong>Modo Promedio</strong> (Agencia de Viajes Booking / eDreams)</span>
+                <span>🚀 <strong>Modo Promedio</strong> (Agencia Booking / eDreams)</span>
               </button>
               <button type="button" id="cardNivelProfesional" class="a11y-btn">
-                <span>🔬 <strong>Modo Avanzado / Pro</strong> (Gráficas Precisas Δt=0.5h/1h + Ingeniería)</span>
+                <span>🔬 <strong>Modo Avanzado / Pro</strong> (Δt=0.5h/1h + Ingeniería)</span>
               </button>
             </div>
           </div>
 
-          <div class="adaptation-category-card">
-            <h3>👁️ 2. Adaptaciones Físicas, Visuales y Motoras</h3>
-            <p>Ayudas para baja visión, daltonismo, precisión motora o fotofobia.</p>
+          <div class="adaptation-category-card" data-a11y-panel="visual">
+            <h3>👁️ 2. Modificaciones Visuales y Motoras</h3>
+            <p>Ayudas de contraste, daltonismo, botones grandes, fotofobia y lupas.</p>
             <div class="a11y-btn-stack">
               <button type="button" id="btnModoBajaVision" class="a11y-btn">
                 <span>🔍 <strong>Baja Visión / Alto Contraste</strong></span>
@@ -3012,7 +3110,7 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
                 <span class="status-dot">Desactivado</span>
               </button>
               <button type="button" id="btnModoMotora" class="a11y-btn">
-                <span>🖐️ <strong>Accesibilidad Motora</strong> (Botones grandes + −/+)</span>
+                <span>🖐️ <strong>Accesibilidad Motora</strong> (Botones grandes)</span>
                 <span class="status-dot">Desactivado</span>
               </button>
               <button type="button" id="btnModoFotofobia" class="a11y-btn">
@@ -3047,28 +3145,28 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
             </div>
           </div>
 
-          <div class="adaptation-category-card">
+          <div class="adaptation-category-card" data-a11y-panel="neuro">
             <h3>🧠 3. Adaptaciones Neurodivergentes</h3>
             <p>Lectura clara, predecible, sin sobrecarga visual y con foco guiado.</p>
             <div class="a11y-btn-stack">
               <button type="button" id="btnModoAutismo" class="a11y-btn">
-                <span>🧩 <strong>Modo Autismo / TEA</strong> (Cero animación + literal)</span>
+                <span>🧩 <strong>Modo Autismo / TEA</strong> (Sin emojis + menos texto)</span>
                 <span class="status-dot">Desactivado</span>
               </button>
               <button type="button" id="btnModoTdah" class="a11y-btn">
-                <span>🎯 <strong>Modo TDAH</strong> (Pasos + regla de lectura)</span>
+                <span>🎯 <strong>Modo TDAH</strong> (Palabras clave en negrita + regla)</span>
                 <span class="status-dot">Desactivado</span>
               </button>
               <button type="button" id="btnModoDislexia" class="a11y-btn">
-                <span>📖 <strong>Modo Dislexia</strong> (Fuente clara + espaciado)</span>
+                <span>📖 <strong>Modo Dislexia</strong> (Fuente clara + números grandes)</span>
                 <span class="status-dot">Desactivado</span>
-              </button>
-              <button type="button" id="btnResetA11y" class="btn btn-outline-blue" style="margin-top:2px;">
-                Restablecer Vista Original
               </button>
             </div>
           </div>
         </div>
+        <button type="button" id="btnResetA11y" class="btn btn-outline-blue" style="width:100%; margin-top:10px;">
+          Restablecer Vista Original
+        </button>
       </div>
     </details>
   </div>
@@ -4806,16 +4904,60 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
     });
   }
 
+  let lupaShadowRoot = null;
+  let lupaShadowBodyMirror = null;
+  let lupaShadowContent = null;
+  let lupaShadowStyleEl = null;
+
+  function asegurarShadowLupaCursor() {
+    if (!els.cursorMagnifierLens) return false;
+    if (!lupaShadowRoot) {
+      lupaShadowRoot = els.cursorMagnifierLens.attachShadow({ mode: 'open' });
+      lupaShadowStyleEl = document.createElement('style');
+      const cssBase = Array.from(document.querySelectorAll('head style'))
+        .map((s) => s.textContent || '')
+        .join('\n')
+        .replace(/\bbody\b/g, '.lupa-body-mirror');
+      lupaShadowStyleEl.textContent = cssBase + `
+        :host { all: initial; }
+        .lupa-body-mirror {
+          margin: 0;
+          padding: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+          background-color: var(--bg-page);
+          color: var(--text-main);
+        }
+        #cursorMagnifierContent {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform-origin: 0 0;
+          pointer-events: none;
+          will-change: transform;
+        }
+        #cursorMagnifierLens, #lupaFloatingBar, #tdahFocusBar { display: none !important; }
+      `;
+      lupaShadowBodyMirror = document.createElement('div');
+      lupaShadowBodyMirror.className = `lupa-body-mirror ${document.body.className}`;
+      lupaShadowContent = document.createElement('div');
+      lupaShadowContent.id = 'cursorMagnifierContent';
+      lupaShadowBodyMirror.appendChild(lupaShadowContent);
+      lupaShadowRoot.appendChild(lupaShadowStyleEl);
+      lupaShadowRoot.appendChild(lupaShadowBodyMirror);
+    }
+    return true;
+  }
+
   function reconstruirClonLupaCursor() {
-    if (!state.lupaCursorActiva || !els.appZoomRoot || !els.cursorMagnifierContent) return;
+    if (!state.lupaCursorActiva || !els.appZoomRoot || !asegurarShadowLupaCursor()) return;
+    lupaShadowBodyMirror.className = `lupa-body-mirror ${document.body.className}`;
+
     const zoomGen = (state.zoomLupaPct || 100) / 100;
     const rootRect = els.appZoomRoot.getBoundingClientRect();
 
     const clon = els.appZoomRoot.cloneNode(true);
-    clon.removeAttribute('id');
     clon.style.zoom = '100%';
     clon.style.width = `${els.appZoomRoot.offsetWidth}px`;
-    clon.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
     // Sincronizar posición exacta de elementos fijos dentro de appZoomRoot (como el panel izquierdo de adaptaciones)
     const origWrapper = els.appZoomRoot.querySelector('.a11y-drawer-wrapper');
@@ -4831,7 +4973,7 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
     }
 
     const origPanel = els.panelAdaptaciones;
-    const clonPanel = clon.querySelector('.expandable-drawer');
+    const clonPanel = clon.querySelector('#panelAdaptaciones');
     if (origPanel && clonPanel && origPanel.open) {
       clonPanel.scrollTop = origPanel.scrollTop;
     }
@@ -4859,8 +5001,8 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
       } catch (_) {}
     });
 
-    els.cursorMagnifierContent.innerHTML = '';
-    els.cursorMagnifierContent.appendChild(clon);
+    lupaShadowContent.innerHTML = '';
+    lupaShadowContent.appendChild(clon);
     if (origPanel && clonPanel && origPanel.open) {
       clonPanel.scrollTop = origPanel.scrollTop;
     }
@@ -4880,7 +5022,7 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
   }
 
   function actualizarPosicionLupaCursor(clientX, clientY) {
-    if (!state.lupaCursorActiva || !els.cursorMagnifierLens || !els.cursorMagnifierContent || !els.appZoomRoot) return;
+    if (!state.lupaCursorActiva || !els.cursorMagnifierLens || !lupaShadowContent || !els.appZoomRoot) return;
     const radio = 105;
     const factor = state.zoomCursorFactor || 2.0;
     const zoomGen = (state.zoomLupaPct || 100) / 100;
@@ -4891,7 +5033,7 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
     els.cursorMagnifierLens.hidden = false;
     els.cursorMagnifierLens.style.left = `${Math.round(clientX - radio)}px`;
     els.cursorMagnifierLens.style.top = `${Math.round(clientY - radio)}px`;
-    els.cursorMagnifierContent.style.transform = `translate3d(${radio - relX * factor}px, ${radio - relY * factor}px, 0) scale(${factor})`;
+    lupaShadowContent.style.transform = `translate3d(${radio - relX * factor}px, ${radio - relY * factor}px, 0) scale(${factor})`;
   }
 
   function toggleLupaCursor(activo) {
@@ -7396,6 +7538,21 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
         programarSyncLupaCursor();
       });
     }
+
+    document.querySelectorAll('.a11y-subtab-btn').forEach((tabBtn) => {
+      tabBtn.addEventListener('click', () => {
+        const target = tabBtn.getAttribute('data-a11y-tab');
+        document.querySelectorAll('.a11y-subtab-btn').forEach((b) => {
+          const active = b === tabBtn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        document.querySelectorAll('#panelAdaptaciones .adaptation-category-card').forEach((card) => {
+          card.classList.toggle('active', card.getAttribute('data-a11y-panel') === target);
+        });
+        programarSyncLupaCursor();
+      });
+    });
 
     if (els.panelAdaptaciones) {
       els.panelAdaptaciones.addEventListener('toggle', () => {

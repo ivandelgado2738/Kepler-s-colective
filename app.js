@@ -589,16 +589,60 @@
     });
   }
 
+  let lupaShadowRoot = null;
+  let lupaShadowBodyMirror = null;
+  let lupaShadowContent = null;
+  let lupaShadowStyleEl = null;
+
+  function asegurarShadowLupaCursor() {
+    if (!els.cursorMagnifierLens) return false;
+    if (!lupaShadowRoot) {
+      lupaShadowRoot = els.cursorMagnifierLens.attachShadow({ mode: 'open' });
+      lupaShadowStyleEl = document.createElement('style');
+      const cssBase = Array.from(document.querySelectorAll('head style'))
+        .map((s) => s.textContent || '')
+        .join('\n')
+        .replace(/\bbody\b/g, '.lupa-body-mirror');
+      lupaShadowStyleEl.textContent = cssBase + `
+        :host { all: initial; }
+        .lupa-body-mirror {
+          margin: 0;
+          padding: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+          background-color: var(--bg-page);
+          color: var(--text-main);
+        }
+        #cursorMagnifierContent {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform-origin: 0 0;
+          pointer-events: none;
+          will-change: transform;
+        }
+        #cursorMagnifierLens, #lupaFloatingBar, #tdahFocusBar { display: none !important; }
+      `;
+      lupaShadowBodyMirror = document.createElement('div');
+      lupaShadowBodyMirror.className = `lupa-body-mirror ${document.body.className}`;
+      lupaShadowContent = document.createElement('div');
+      lupaShadowContent.id = 'cursorMagnifierContent';
+      lupaShadowBodyMirror.appendChild(lupaShadowContent);
+      lupaShadowRoot.appendChild(lupaShadowStyleEl);
+      lupaShadowRoot.appendChild(lupaShadowBodyMirror);
+    }
+    return true;
+  }
+
   function reconstruirClonLupaCursor() {
-    if (!state.lupaCursorActiva || !els.appZoomRoot || !els.cursorMagnifierContent) return;
+    if (!state.lupaCursorActiva || !els.appZoomRoot || !asegurarShadowLupaCursor()) return;
+    lupaShadowBodyMirror.className = `lupa-body-mirror ${document.body.className}`;
+
     const zoomGen = (state.zoomLupaPct || 100) / 100;
     const rootRect = els.appZoomRoot.getBoundingClientRect();
 
     const clon = els.appZoomRoot.cloneNode(true);
-    clon.removeAttribute('id');
     clon.style.zoom = '100%';
     clon.style.width = `${els.appZoomRoot.offsetWidth}px`;
-    clon.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
     // Sincronizar posición exacta de elementos fijos dentro de appZoomRoot (como el panel izquierdo de adaptaciones)
     const origWrapper = els.appZoomRoot.querySelector('.a11y-drawer-wrapper');
@@ -614,7 +658,7 @@
     }
 
     const origPanel = els.panelAdaptaciones;
-    const clonPanel = clon.querySelector('.expandable-drawer');
+    const clonPanel = clon.querySelector('#panelAdaptaciones');
     if (origPanel && clonPanel && origPanel.open) {
       clonPanel.scrollTop = origPanel.scrollTop;
     }
@@ -642,8 +686,8 @@
       } catch (_) {}
     });
 
-    els.cursorMagnifierContent.innerHTML = '';
-    els.cursorMagnifierContent.appendChild(clon);
+    lupaShadowContent.innerHTML = '';
+    lupaShadowContent.appendChild(clon);
     if (origPanel && clonPanel && origPanel.open) {
       clonPanel.scrollTop = origPanel.scrollTop;
     }
@@ -663,7 +707,7 @@
   }
 
   function actualizarPosicionLupaCursor(clientX, clientY) {
-    if (!state.lupaCursorActiva || !els.cursorMagnifierLens || !els.cursorMagnifierContent || !els.appZoomRoot) return;
+    if (!state.lupaCursorActiva || !els.cursorMagnifierLens || !lupaShadowContent || !els.appZoomRoot) return;
     const radio = 105;
     const factor = state.zoomCursorFactor || 2.0;
     const zoomGen = (state.zoomLupaPct || 100) / 100;
@@ -674,7 +718,7 @@
     els.cursorMagnifierLens.hidden = false;
     els.cursorMagnifierLens.style.left = `${Math.round(clientX - radio)}px`;
     els.cursorMagnifierLens.style.top = `${Math.round(clientY - radio)}px`;
-    els.cursorMagnifierContent.style.transform = `translate3d(${radio - relX * factor}px, ${radio - relY * factor}px, 0) scale(${factor})`;
+    lupaShadowContent.style.transform = `translate3d(${radio - relX * factor}px, ${radio - relY * factor}px, 0) scale(${factor})`;
   }
 
   function toggleLupaCursor(activo) {
@@ -3179,6 +3223,21 @@
         programarSyncLupaCursor();
       });
     }
+
+    document.querySelectorAll('.a11y-subtab-btn').forEach((tabBtn) => {
+      tabBtn.addEventListener('click', () => {
+        const target = tabBtn.getAttribute('data-a11y-tab');
+        document.querySelectorAll('.a11y-subtab-btn').forEach((b) => {
+          const active = b === tabBtn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        document.querySelectorAll('#panelAdaptaciones .adaptation-category-card').forEach((card) => {
+          card.classList.toggle('active', card.getAttribute('data-a11y-panel') === target);
+        });
+        programarSyncLupaCursor();
+      });
+    });
 
     if (els.panelAdaptaciones) {
       els.panelAdaptaciones.addEventListener('toggle', () => {

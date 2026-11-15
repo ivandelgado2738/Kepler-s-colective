@@ -2712,57 +2712,104 @@ body.modo-fotofobia .bridge-concept-box {
 body.modo-fotofobia .search-feedback-toast,
 body.modo-fotofobia .top-fechas-panel h4,
 body.modo-fotofobia .bridge-head h4,
-body.modo-fotofobia .bridge-concept-box .pro-ref {
+body.modo-fotofobia .bridge-concept-box .pro-ref,
+body.modo-fotofobia .lupa-control-head,
+body.modo-fotofobia .lupa-control-head strong,
+body.modo-fotofobia .filter-row-head,
+body.modo-fotofobia .filter-row-head strong,
+body.modo-fotofobia .bar-row strong,
+body.modo-fotofobia .curiosidad-body,
+body.modo-fotofobia .booking-desc,
+body.modo-fotofobia .adaptation-category-card p,
+body.modo-fotofobia .student-pillar p,
+body.modo-fotofobia .kid-desc-box p,
+body.modo-fotofobia .section-heading p,
+body.modo-fotofobia .drawer-body p,
+body.modo-fotofobia .drawer-body label,
+body.modo-fotofobia .drawer-body strong,
+body.modo-fotofobia #panelAdaptaciones,
+body.modo-fotofobia #panelAdaptaciones summary,
+body.modo-fotofobia #panelAdaptaciones .summary-toggle-pill {
   color: var(--nasa-white) !important;
 }
 
+body.modo-fotofobia .lupa-control-box {
+  background-color: var(--nasa-horizon);
+  border-color: var(--nasa-sky);
+}
+
+body.modo-fotofobia .lupa-mini-btn,
+body.modo-fotofobia .a11y-subtab-btn,
+body.modo-fotofobia .btn-outline-blue {
+  background-color: var(--nasa-navy);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-sky);
+}
+
+body.modo-fotofobia .a11y-subtab-btn.active {
+  background-color: var(--nasa-red);
+  border-color: var(--nasa-red);
+  color: var(--nasa-white) !important;
+}
+
+body.modo-fotofobia .a11y-btn.active {
+  background-color: var(--nasa-blue);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-white);
+}
+
+body.modo-fotofobia input[type="number"],
+body.modo-fotofobia input[type="datetime-local"],
+body.modo-fotofobia select {
+  background-color: var(--nasa-deep);
+  color: var(--nasa-white) !important;
+  border-color: var(--nasa-sky);
+}
+
 /* ============================================================================
-   TABULACIONES Y SANGRÍAS ESTRUCTURALES (Jerarquía visual limpia)
+   ALINEACIÓN LIMPIA Y ENCUADRE EQUILIBRADO
    ============================================================================ */
 .drawer-body {
-  padding: 18px 24px 22px 28px;
+  padding: 16px 22px 20px;
 }
 
 .filter-group {
   padding-left: 14px;
   border-left: 3px solid var(--nasa-ice);
-  margin-left: 2px;
+  margin-left: 0;
 }
 
-.filter-group > h3 {
-  margin-left: -14px;
-  padding-left: 10px;
-}
-
+.filter-group > h3,
 .filter-group .filter-row,
 .filter-group .filter-hint,
 .filter-group .mode-tabs-inline {
-  margin-left: 6px;
+  margin-left: 0;
 }
 
 .adaptation-category-card .a11y-btn-stack,
 .adaptation-category-card .lupa-control-box {
-  margin-left: 8px;
+  margin-left: 0;
 }
 
 .kid-desc-box,
 .bridge-concept-box,
 .student-pillar {
-  padding-left: 18px;
+  padding-left: 16px;
   border-left: 4px solid var(--nasa-blue);
 }
 
 .curiosidad-content p.curiosidad-body,
 .booking-card-info .booking-desc {
-  padding-left: 10px;
-  border-left: 2px solid var(--border-soft);
+  padding-left: 0;
+  border-left: none;
+  text-align: left;
 }
 
 .section-container ul,
 .section-container ol,
 .drawer-body ul,
 .drawer-body ol {
-  padding-left: 26px;
+  padding-left: 22px;
   margin-top: 6px;
   margin-bottom: 10px;
   line-height: 1.55;
@@ -2770,6 +2817,14 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
 
 body.modo-fotofobia .filter-group {
   border-left-color: var(--nasa-horizon);
+}
+
+@media (min-width: 1120px) {
+  .hero-inner,
+  .section-container {
+    padding-left: 140px;
+    padding-right: 28px;
+  }
 }
 
 /* ============================================================================
@@ -2883,6 +2938,44 @@ body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
 #panelAdaptaciones .adaptations-grid {
   grid-template-columns: 1fr;
   gap: 10px;
+}
+
+.a11y-subtabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.a11y-subtab-btn {
+  border: 1.5px solid var(--border-soft);
+  background-color: var(--bg-subtle);
+  color: var(--nasa-navy);
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 7px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.a11y-subtab-btn:hover {
+  border-color: var(--nasa-blue);
+}
+
+.a11y-subtab-btn.active {
+  background-color: var(--nasa-blue);
+  border-color: var(--nasa-blue);
+  color: var(--nasa-white);
+}
+
+#panelAdaptaciones .adaptation-category-card {
+  display: none;
+}
+
+#panelAdaptaciones .adaptation-category-card.active {
+  display: block;
 }
 
 @media (max-width: 720px) {
