@@ -252,6 +252,10 @@
     servidorCppActivo: false,
     daltonismoActivo: false,
     zoomLupaPct: 100,
+    lupaCursorActiva: false,
+    zoomCursorFactor: 2.0,
+    cursorLensRaf: null,
+    ultimoCursorPos: null,
     textosOriginalesAutismo: new WeakMap(),
     ultimaBusqueda: null,
     ultimaComparacion: null,
@@ -482,6 +486,11 @@
     rngLupaFlotante: document.getElementById('rngLupaFlotante'),
     lblLupaFlotante: document.getElementById('lblLupaFlotante'),
     btnLupaFlotanteReset: document.getElementById('btnLupaFlotanteReset'),
+    btnModoLupaCursor: document.getElementById('btnModoLupaCursor'),
+    rngZoomCursor: document.getElementById('rngZoomCursor'),
+    lblZoomCursor: document.getElementById('lblZoomCursor'),
+    cursorMagnifierLens: document.getElementById('cursorMagnifierLens'),
+    cursorMagnifierContent: document.getElementById('cursorMagnifierContent'),
   };
 
   function aplicarZoomLupa(pct) {
@@ -523,6 +532,127 @@
         }
       } else if (state.textosOriginalesAutismo.has(nodo)) {
         nodo.nodeValue = state.textosOriginalesAutismo.get(nodo);
+      }
+    }
+  }
+
+  const TDAH_KEYWORDS_REGEX = /\b(Polo Sur|Shackleton|Malapert|Haworth|De Gerlache|Faustini|Shoemaker|Nobile|Iluminaci[oó]n|Comunicaci[oó]n|Pendiente|Temperatura|Energ[ií]a|DTE|Rel[eé]|Reservar|Comparar|Puntuaci[oó]n|Nota|[ÓO]ptimo|Sol|Tierra|Hielo|Cr[aá]ter(?:es)?|NASA|Artemis|LRO|Apollo|Latitud|Longitud|Bater[ií]a|Paneles|Sombra|Filtro|Lupa)\b/gi;
+
+  function limpiarPalabrasClaveTdah() {
+    document.querySelectorAll('span.tdah-kw').forEach((span) => {
+      const parent = span.parentNode;
+      if (!parent) return;
+      parent.replaceChild(document.createTextNode(span.textContent || ''), span);
+      parent.normalize();
+    });
+  }
+
+  function aplicarPalabrasClaveTdah(activo) {
+    limpiarPalabrasClaveTdah();
+    if (!activo || !els.appZoomRoot) return;
+    const walker = document.createTreeWalker(els.appZoomRoot, NodeFilter.SHOW_TEXT, null);
+    const nodos = [];
+    let nodo;
+    while ((nodo = walker.nextNode())) {
+      const p = nodo.parentElement;
+      if (!p) continue;
+      const tag = p.tagName;
+      if (['SCRIPT', 'STYLE', 'CODE', 'PRE', 'INPUT', 'TEXTAREA', 'SELECT', 'OPTION', 'STRONG', 'B'].includes(tag)) continue;
+      if (p.closest('.tdah-kw, .status-dot')) continue;
+      if (TDAH_KEYWORDS_REGEX.test(nodo.nodeValue || '')) {
+        nodos.push(nodo);
+      }
+      TDAH_KEYWORDS_REGEX.lastIndex = 0;
+    }
+    nodos.forEach((n) => {
+      const texto = n.nodeValue || '';
+      TDAH_KEYWORDS_REGEX.lastIndex = 0;
+      let lastIdx = 0;
+      const frag = document.createDocumentFragment();
+      let m;
+      while ((m = TDAH_KEYWORDS_REGEX.exec(texto)) !== null) {
+        if (m.index > lastIdx) {
+          frag.appendChild(document.createTextNode(texto.slice(lastIdx, m.index)));
+        }
+        const span = document.createElement('span');
+        span.className = 'tdah-kw';
+        span.textContent = m[0];
+        frag.appendChild(span);
+        lastIdx = m.index + m[0].length;
+      }
+      if (lastIdx < texto.length) {
+        frag.appendChild(document.createTextNode(texto.slice(lastIdx)));
+      }
+      if (n.parentNode) {
+        n.parentNode.replaceChild(frag, n);
+      }
+    });
+  }
+
+  function reconstruirClonLupaCursor() {
+    if (!state.lupaCursorActiva || !els.appZoomRoot || !els.cursorMagnifierContent) return;
+    const clon = els.appZoomRoot.cloneNode(true);
+    clon.removeAttribute('id');
+    clon.style.zoom = '100%';
+    clon.style.width = `${els.appZoomRoot.offsetWidth}px`;
+    clon.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
+    const origInputs = els.appZoomRoot.querySelectorAll('input, select, textarea');
+    const clonInputs = clon.querySelectorAll('input, select, textarea');
+    origInputs.forEach((orig, idx) => {
+      const dst = clonInputs[idx];
+      if (!dst) return;
+      if (orig.tagName === 'SELECT') dst.selectedIndex = orig.selectedIndex;
+      else if (orig.type === 'checkbox' || orig.type === 'radio') dst.checked = orig.checked;
+      else dst.value = orig.value;
+    });
+
+    const origCanvases = els.appZoomRoot.querySelectorAll('canvas');
+    const clonCanvases = clon.querySelectorAll('canvas');
+    origCanvases.forEach((origC, idx) => {
+      const dstC = clonCanvases[idx];
+      if (!dstC || origC.width === 0 || origC.height === 0) return;
+      try {
+        dstC.width = origC.width;
+        dstC.height = origC.height;
+        const ctx = dstC.getContext('2d');
+        if (ctx) ctx.drawImage(origC, 0, 0);
+      } catch (_) {}
+    });
+
+    els.cursorMagnifierContent.innerHTML = '';
+    els.cursorMagnifierContent.appendChild(clon);
+  }
+
+  function actualizarPosicionLupaCursor(clientX, clientY) {
+    if (!state.lupaCursorActiva || !els.cursorMagnifierLens || !els.cursorMagnifierContent || !els.appZoomRoot) return;
+    const radio = 105;
+    const factor = state.zoomCursorFactor || 2.0;
+    const zoomGen = (state.zoomLupaPct || 100) / 100;
+    const rect = els.appZoomRoot.getBoundingClientRect();
+    const relX = (clientX - rect.left) / zoomGen;
+    const relY = (clientY - rect.top) / zoomGen;
+
+    els.cursorMagnifierLens.hidden = false;
+    els.cursorMagnifierLens.style.left = `${Math.round(clientX - radio)}px`;
+    els.cursorMagnifierLens.style.top = `${Math.round(clientY - radio)}px`;
+    els.cursorMagnifierContent.style.transform = `translate3d(${radio - relX * factor}px, ${radio - relY * factor}px, 0) scale(${factor})`;
+  }
+
+  function toggleLupaCursor(activo) {
+    state.lupaCursorActiva = Boolean(activo);
+    if (els.btnModoLupaCursor) {
+      els.btnModoLupaCursor.classList.toggle('active', state.lupaCursorActiva);
+      const dot = els.btnModoLupaCursor.querySelector('.status-dot');
+      if (dot) dot.textContent = state.lupaCursorActiva ? 'Activado' : 'Desactivado';
+    }
+    if (els.cursorMagnifierLens) {
+      els.cursorMagnifierLens.hidden = !state.lupaCursorActiva;
+    }
+    if (state.lupaCursorActiva) {
+      reconstruirClonLupaCursor();
+      if (state.ultimoCursorPos) {
+        actualizarPosicionLupaCursor(state.ultimoCursorPos.x, state.ultimoCursorPos.y);
       }
     }
   }
@@ -1577,6 +1707,12 @@
     ejecutarComparacion();
     if (document.body.classList.contains('modo-autismo')) {
       aplicarLimpiezaAutismo(true);
+    }
+    if (document.body.classList.contains('modo-tdah')) {
+      aplicarPalabrasClaveTdah(true);
+    }
+    if (state.lupaCursorActiva) {
+      reconstruirClonLupaCursor();
     }
   }
 
@@ -2662,6 +2798,12 @@
     if (document.body.classList.contains('modo-autismo')) {
       aplicarLimpiezaAutismo(true);
     }
+    if (document.body.classList.contains('modo-tdah')) {
+      aplicarPalabrasClaveTdah(true);
+    }
+    if (state.lupaCursorActiva) {
+      reconstruirClonLupaCursor();
+    }
   }
 
   function scrollAResultadosSiInteractivo(debeHacerScroll) {
@@ -2899,6 +3041,12 @@
     if (document.body.classList.contains('modo-autismo')) {
       aplicarLimpiezaAutismo(true);
     }
+    if (document.body.classList.contains('modo-tdah')) {
+      aplicarPalabrasClaveTdah(true);
+    }
+    if (state.lupaCursorActiva) {
+      reconstruirClonLupaCursor();
+    }
   }
 
   async function ejecutarComparacion() {
@@ -3086,8 +3234,12 @@
 
     toggleModoClase(els.btnModoAutismo, 'modo-autismo', (activo) => {
       aplicarLimpiezaAutismo(activo);
+      if (state.lupaCursorActiva) reconstruirClonLupaCursor();
     });
-    toggleModoClase(els.btnModoTdah, 'modo-tdah');
+    toggleModoClase(els.btnModoTdah, 'modo-tdah', (activo) => {
+      aplicarPalabrasClaveTdah(activo);
+      if (state.lupaCursorActiva) reconstruirClonLupaCursor();
+    });
     toggleModoClase(els.btnModoDislexia, 'modo-dislexia');
     toggleModoClase(els.btnModoBajaVision, 'modo-baja-vision');
     toggleModoClase(els.btnModoMotora, 'modo-motora');
@@ -3096,6 +3248,22 @@
       state.daltonismoActivo = activo;
       if (state.ultimaBusqueda) renderResultadoBusqueda(state.ultimaBusqueda);
     });
+
+    if (els.btnModoLupaCursor) {
+      els.btnModoLupaCursor.addEventListener('click', () => {
+        toggleLupaCursor(!state.lupaCursorActiva);
+      });
+    }
+    if (els.rngZoomCursor) {
+      els.rngZoomCursor.addEventListener('input', (e) => {
+        const val = Math.min(3.0, Math.max(1.25, parseFloat(e.target.value || '2')));
+        state.zoomCursorFactor = val;
+        if (els.lblZoomCursor) els.lblZoomCursor.textContent = `${val.toFixed(2)}x`;
+        if (state.lupaCursorActiva && state.ultimoCursorPos) {
+          actualizarPosicionLupaCursor(state.ultimoCursorPos.x, state.ultimoCursorPos.y);
+        }
+      });
+    }
 
     if (els.rngLupaContinua) {
       els.rngLupaContinua.addEventListener('input', (e) => {
@@ -3137,6 +3305,8 @@
         );
         state.daltonismoActivo = false;
         aplicarLimpiezaAutismo(false);
+        aplicarPalabrasClaveTdah(false);
+        toggleLupaCursor(false);
         aplicarZoomLupa(100);
         [
           els.btnModoAutismo,
@@ -3157,8 +3327,27 @@
     }
 
     window.addEventListener('mousemove', (ev) => {
+      state.ultimoCursorPos = { x: ev.clientX, y: ev.clientY };
       if (document.body.classList.contains('modo-tdah') && els.tdahFocusBar) {
         els.tdahFocusBar.style.top = `${Math.max(0, ev.clientY - 48)}px`;
+      }
+      if (state.lupaCursorActiva) {
+        if (state.cursorLensRaf) cancelAnimationFrame(state.cursorLensRaf);
+        state.cursorLensRaf = requestAnimationFrame(() => {
+          actualizarPosicionLupaCursor(ev.clientX, ev.clientY);
+        });
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      if (state.lupaCursorActiva && state.ultimoCursorPos) {
+        actualizarPosicionLupaCursor(state.ultimoCursorPos.x, state.ultimoCursorPos.y);
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      if (state.lupaCursorActiva) {
+        reconstruirClonLupaCursor();
       }
     });
 

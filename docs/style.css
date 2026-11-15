@@ -2715,3 +2715,108 @@ body.modo-fotofobia .bridge-head h4,
 body.modo-fotofobia .bridge-concept-box .pro-ref {
   color: var(--nasa-white) !important;
 }
+
+/* ============================================================================
+   TABULACIONES Y SANGRÍAS ESTRUCTURALES (Jerarquía visual limpia)
+   ============================================================================ */
+.drawer-body {
+  padding: 18px 24px 22px 28px;
+}
+
+.filter-group {
+  padding-left: 14px;
+  border-left: 3px solid var(--nasa-ice);
+  margin-left: 2px;
+}
+
+.filter-group > h3 {
+  margin-left: -14px;
+  padding-left: 10px;
+}
+
+.filter-group .filter-row,
+.filter-group .filter-hint,
+.filter-group .mode-tabs-inline {
+  margin-left: 6px;
+}
+
+.adaptation-category-card .a11y-btn-stack,
+.adaptation-category-card .lupa-control-box {
+  margin-left: 8px;
+}
+
+.kid-desc-box,
+.bridge-concept-box,
+.student-pillar {
+  padding-left: 18px;
+  border-left: 4px solid var(--nasa-blue);
+}
+
+.curiosidad-content p.curiosidad-body,
+.booking-card-info .booking-desc {
+  padding-left: 10px;
+  border-left: 2px solid var(--border-soft);
+}
+
+.section-container ul,
+.section-container ol,
+.drawer-body ul,
+.drawer-body ol {
+  padding-left: 26px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  line-height: 1.55;
+}
+
+body.modo-fotofobia .filter-group {
+  border-left-color: var(--nasa-horizon);
+}
+
+/* ============================================================================
+   MODO TDAH: PALABRAS CLAVE EN NEGRITA Y RESALTE LEGIBLE
+   ============================================================================ */
+body.modo-tdah strong,
+body.modo-tdah b,
+body.modo-tdah .tdah-kw {
+  font-weight: 800 !important;
+  color: var(--nasa-navy);
+  background-color: rgba(16, 91, 216, 0.09);
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+body.modo-fotofobia.modo-tdah strong,
+body.modo-fotofobia.modo-tdah b,
+body.modo-fotofobia.modo-tdah .tdah-kw {
+  color: var(--nasa-white) !important;
+  background-color: rgba(252, 61, 33, 0.25);
+}
+
+/* ============================================================================
+   LUPA EN EL CURSOR (Aumento configurable donde esté el puntero)
+   ============================================================================ */
+#cursorMagnifierLens {
+  position: fixed;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  border: 3px solid var(--nasa-red);
+  box-shadow: 0 12px 32px rgba(4, 17, 43, 0.45), inset 0 0 0 2px var(--nasa-navy);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10000;
+  background-color: var(--bg-page);
+}
+
+#cursorMagnifierLens[hidden] {
+  display: none !important;
+}
+
+#cursorMagnifierContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  will-change: transform;
+}
