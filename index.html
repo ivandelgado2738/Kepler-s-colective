@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NASA LunarBooking • eDreams Polo Sur Lunar (Niño / Intermedio / Avanzado + Esféricas)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
 /* ============================================================================
@@ -2391,8 +2394,131 @@ body.nivel-profesional .prof-telemetry-strip {
 }
 
 /* ============================================================================
-   ADAPTACIONES FÍSICAS, VISUALES Y COGNITIVAS
+   ALINEACIÓN UNIFORME EN TODOS LOS MODOS + ADAPTACIONES FÍSICAS Y COGNITIVAS
    ============================================================================ */
+.search-grid-centered,
+.metrics-grid-4,
+.prof-telemetry-grid,
+.adaptations-grid,
+.student-pillars,
+.curiosidades-grid,
+.top-fechas-grid,
+.bridge-concepts-grid,
+.booking-card {
+  align-items: stretch;
+}
+
+.search-cell,
+.metric-tile,
+.prof-kpi,
+.adaptation-category-card,
+.student-pillar,
+.curiosidad-card,
+.top-fecha-chip,
+.bridge-concept-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.adaptation-category-card,
+.student-pillar {
+  height: 100%;
+  justify-content: flex-start;
+}
+
+.a11y-btn-stack {
+  margin-top: auto;
+}
+
+/* Lupa Continua (Zoom 100% - 200% + Barra flotante de control rápido) */
+.lupa-control-box {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lupa-control-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nasa-navy);
+}
+
+.lupa-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lupa-slider-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--nasa-blue);
+  cursor: pointer;
+}
+
+.lupa-mini-btn {
+  border: 1px solid var(--border-soft);
+  background-color: var(--bg-card);
+  color: var(--nasa-navy);
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.lupa-mini-btn:hover {
+  border-color: var(--nasa-blue);
+  background-color: var(--nasa-ice);
+}
+
+#lupaFloatingBar {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  background-color: var(--nasa-navy);
+  color: var(--nasa-white);
+  border: 2px solid var(--nasa-red);
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: var(--shadow-float);
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#lupaFloatingBar.visible {
+  display: flex;
+}
+
+#lupaFloatingBar input[type="range"] {
+  width: 110px;
+  accent-color: var(--nasa-red);
+  cursor: pointer;
+}
+
+#lupaFloatingBar button {
+  background-color: var(--nasa-red);
+  color: var(--nasa-white);
+  border: none;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* MODO AUTISMO / TEA: Alineación estricta, sin emojis, sin animaciones y menos texto */
 body.modo-autismo,
 body.modo-autismo * {
   transition: none !important;
@@ -2402,6 +2528,33 @@ body.modo-autismo * {
 
 body.modo-autismo .literal-tag {
   display: inline-block;
+}
+
+body.modo-autismo .kid-desc-box,
+body.modo-autismo .filter-hint,
+body.modo-autismo .human-guide-banner,
+body.modo-autismo .agency-trust-pills,
+body.modo-autismo .student-pillar .pillar-example {
+  display: none !important;
+}
+
+body.modo-autismo .featured-result-card,
+body.modo-autismo .booking-card,
+body.modo-autismo .curiosidad-card,
+body.modo-autismo .filter-box,
+body.modo-autismo .booking-search-card {
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+  text-align: left !important;
+}
+
+body.modo-autismo .section-heading {
+  text-align: left;
+  margin-left: 0;
+}
+
+body.modo-autismo .curiosidades-filter-bar {
+  justify-content: flex-start;
 }
 
 #tdahFocusBar {
@@ -2447,11 +2600,56 @@ body.modo-tdah .featured-result-card {
   outline: 2.5px solid var(--nasa-science-blue);
 }
 
+/* MODO DISLEXIA + DISCALCULIA NUMÉRICA: Atkinson Hyperlegible + números grandes tabulares */
 body.modo-dislexia {
-  font-family: 'Verdana', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --font-num-dislexia: 'Atkinson Hyperlegible', 'Verdana', 'Tahoma', sans-serif;
+  font-family: 'Atkinson Hyperlegible', 'Verdana', 'Trebuchet MS', sans-serif;
   letter-spacing: 0.05em;
   word-spacing: 0.12em;
   line-height: 1.8;
+}
+
+body.modo-dislexia .score-number,
+body.modo-dislexia .metric-tile strong,
+body.modo-dislexia .prof-kpi strong,
+body.modo-dislexia .coords-pill,
+body.modo-dislexia .filter-row-head strong,
+body.modo-dislexia .bar-row strong,
+body.modo-dislexia .best-dates-mini,
+body.modo-dislexia .bridge-concept-box code,
+body.modo-dislexia .vector-3d-readout,
+body.modo-dislexia .chart-hover-bar,
+body.modo-dislexia input[type="number"],
+body.modo-dislexia input[type="datetime-local"],
+body.modo-dislexia .top-fecha-chip strong {
+  font-family: var(--font-num-dislexia) !important;
+  font-variant-numeric: tabular-nums slashed-zero !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 800 !important;
+}
+
+body.modo-dislexia .score-number {
+  font-size: 32px !important;
+  padding: 8px 14px !important;
+}
+
+body.modo-dislexia .metric-tile strong,
+body.modo-dislexia .prof-kpi strong {
+  font-size: 22px !important;
+}
+
+body.modo-dislexia input[type="number"],
+body.modo-dislexia input[type="datetime-local"],
+body.modo-dislexia .filter-row-head strong,
+body.modo-dislexia .bar-row strong {
+  font-size: 17px !important;
+}
+
+body.modo-dislexia .coords-pill,
+body.modo-dislexia .bridge-concept-box code,
+body.modo-dislexia .vector-3d-readout,
+body.modo-dislexia .best-dates-mini {
+  font-size: 14.5px !important;
 }
 
 body.modo-baja-vision {
@@ -2531,11 +2729,19 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
 
   </style>
 </head>
-<body>
-</head>
 <body class="nivel-estandar">
-  <!-- Regla visual de enfoque para el Modo TDAH -->
+<!-- Regla visual de enfoque para el Modo TDAH -->
   <div id="tdahFocusBar"></div>
+
+  <!-- Barra flotante de Lupa Continua (visible cuando zoom > 100%, fuera de appZoomRoot) -->
+  <div id="lupaFloatingBar" hidden>
+    <span class="lupa-float-label">Lupa</span>
+    <input type="range" id="rngLupaFlotante" min="100" max="200" step="5" value="100" aria-label="Zoom de lupa continua flotante" />
+    <strong id="lblLupaFlotante">100%</strong>
+    <button type="button" id="btnLupaFlotanteReset" class="btn-lupa-mini">100%</button>
+  </div>
+
+  <div id="appZoomRoot">
 
   <!-- ========================================================================
        CABECERA COMPACTA ESTILO BOOKING.COM / eDREAMS (COLORES OFICIALES NASA)
@@ -2627,6 +2833,18 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
                 <span>🌙 <strong>Descanso Visual / Fotofobia</strong> (Oscuro espacial)</span>
                 <span class="status-dot">Desactivado</span>
               </button>
+            </div>
+            <div class="lupa-control-box">
+              <div class="lupa-control-header">
+                <span>🔍 <strong>Lupa Continua</strong> (100% – 200%)</span>
+                <strong id="lblLupaContinua">100%</strong>
+              </div>
+              <div class="lupa-slider-row">
+                <button type="button" id="btnLupaMenos" class="btn-lupa-mini" aria-label="Reducir lupa">−</button>
+                <input type="range" id="rngLupaContinua" min="100" max="200" step="5" value="100" aria-label="Control continuo de lupa" />
+                <button type="button" id="btnLupaMas" class="btn-lupa-mini" aria-label="Ampliar lupa">+</button>
+                <button type="button" id="btnLupaReset" class="btn-lupa-mini">100%</button>
+              </div>
             </div>
           </div>
 
@@ -3527,8 +3745,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
     <div class="section-heading">
       <h2>🌕 Noticias de la NASA, Cristales, Montañas Polares y Polvo Estelar (Fotos Reales)</h2>
       <p>
-        Cada historia está ilustrada con fotografías reales del archivo histórico y orbital de la NASA (misiones Apollo,
-        Lunar Reconnaissance Orbiter y muestras de laboratorio).
+        Datos reales con fotografías del archivo histórico y orbital de la NASA (Apollo y LRO).
       </p>
     </div>
 
@@ -3558,9 +3775,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Cristales en la Luna</span>
             <h3>Los cristales de cuarzo de la NASA que miden la distancia a la Luna</h3>
             <p class="curiosidad-body">
-              Las misiones Apollo colocaron paneles con <strong>prismas de cristal de sílice fundida</strong>. Al
-              dispararles un láser desde la Tierra, el haz rebota en los cristales y demuestra que la Luna se aleja
-              <strong>3,8 cm al año</strong>.
+              Prismas Apollo que devuelven láseres terrestres y prueban que la Luna se aleja <strong>3,8 cm/año</strong>.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA ID: 6900957 (Apollo 11 LRRR)</div>
@@ -3580,9 +3795,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Cráteres del Polo Sur &bull; Humor</span>
             <h3>«El Mejor Cráter para Vivir»: Ático en el Borde de Shackleton</h3>
             <p class="curiosidad-body">
-              Su cresta disfruta de <strong>hasta un 90% de sol anual</strong> y justo debajo tienes un cráter en sombra
-              eterna a <strong>-230 °C</strong> repleto de hielo para tus bebidas (o combustible). <em>Nota en
-              LunarBooking: 9,8/10.</em>
+              Su cresta recibe <strong>hasta un 90% de sol anual</strong> sobre un cráter helado a <strong>-230 °C</strong>.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA LROC • Guía Inmobiliaria Polo Sur</div>
@@ -3602,8 +3815,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Cristales y Polvo Lunar</span>
             <h3>Cristales de circón revelan que la Luna es 40 millones de años más vieja</h3>
             <p class="curiosidad-body">
-              El análisis átomo a átomo de <strong>cristales microscópicos de circón</strong> conservados en la roca y
-              polvo lunar del Apollo 17 demostró que la corteza lunar cristalizó hace <strong>4.460 millones de años</strong>.
+              Cristales de circón del Apollo 17 fechan la corteza lunar en <strong>4.460 millones de años</strong>.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA ID: S73-16007 (Sample 72255)</div>
@@ -3623,8 +3835,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Montañas del Polo Sur &bull; Humor</span>
             <h3>Montaña de Malapert: «El hotel donde nunca se corta el Wi-Fi con Tierra»</h3>
             <p class="curiosidad-body">
-              Su cumbre de <strong>5.000 metros en el Polo Sur</strong> mantiene a la Tierra siempre a la vista. Eso sí,
-              el <em>ping</em> mínimo por velocidad de la luz es de <strong>2,56 segundos</strong> de ida y vuelta.
+              Cumbre de <strong>5.000 m</strong> con visión directa continua de la Tierra (<em>ping</em> de <strong>2,56 s</strong>).
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA • Telecomunicaciones Polo Sur</div>
@@ -3644,9 +3855,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Polvo Lunar y Cristales</span>
             <h3>Perlas de cristal volcánico y por qué el polvo lunar huele a pólvora</h3>
             <p class="curiosidad-body">
-              El suelo lunar contiene millones de <strong>microesferas de cristal naranja</strong> de antiguos géiseres
-              volcánicos. Al entrar en la cabina, ese polvo fino electrostático huele igual que la <strong>pólvora
-              quemada</strong>.
+              Microesferas volcánicas naranjas cuyo polvo fino electrostático huele a <strong>pólvora quemada</strong>.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA ID: AS17-137-20989</div>
@@ -3666,8 +3875,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Cráteres Helados &bull; Clima</span>
             <h3>Cráteres del Polo Sur (-247 °C): «Lleva abrigo, hace más frío que en Plutón»</h3>
             <p class="curiosidad-body">
-              El sensor <strong>Diviner de la sonda LRO</strong> midió en el fondo de los cráteres polares temperaturas
-              de <strong>26 Kelvin (-247 °C)</strong>, el récord más frío medido en cualquier superficie del Sistema Solar.
+              El sensor LRO Diviner midió <strong>26 K (-247 °C)</strong>, la superficie más fría del Sistema Solar.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA PIA00304 / LRO Diviner</div>
@@ -3687,8 +3895,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Geofísica Lunar</span>
             <h3>Cuando la Luna «vibró como una campana» durante más de una hora</h3>
             <p class="curiosidad-body">
-              Como la corteza lunar carece de agua líquida que amortigüe las ondas, los sismómetros de la NASA
-              registraron <strong>sismos lunares que resonaban durante más de una hora seguida</strong>.
+              Sin agua líquida que amortigüe las ondas, los sismos lunares resuenan más de <strong>una hora</strong>.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA ID: 6900966 (Apollo PSE)</div>
@@ -3708,8 +3915,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
             <span class="curiosidad-tag">Cráteres y Ocio &bull; Humor</span>
             <h3>Club de Golf Lunar: Dos pelotas siguen esperando entre los cráteres</h3>
             <p class="curiosidad-body">
-              En 1971, Alan Shepard lanzó <strong>dos pelotas de golf</strong> sobre el regolito lunar con una gravedad
-              seis veces menor que la terrestre. El búnker de arena de cráteres más grande del cosmos.
+              En 1971, Alan Shepard lanzó <strong>dos pelotas de golf</strong> en gravedad 1/6 g sobre Fra Mauro.
             </p>
           </div>
           <div class="curiosidad-footer">Archivo NASA ID: AS14-66-9301</div>
@@ -3808,6 +4014,7 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
   <footer class="footer-nasa">
     NASA LunarBooking &amp; eDreams Artemis (Exclusivo Polo Sur Lunar 84°S–90°S) &bull; Fotografías Reales NASA LROC / Apollo &bull; Paleta Oficial NASA (#0B3D91, #FC3D21, #061F4A, #105BD8)
   </footer>
+  </div><!-- /#appZoomRoot -->
   <script>
 // ============================================================================
 // ARCHIVO: app.js
@@ -3908,11 +4115,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: 2940.0,
       y_mapa_m: -5890.0,
       altitud_m: 2150.0,
-      descripcion: 'Pico de luz casi eterna en el mismo Polo Sur junto a la mayor trampa fría de hielo.',
-      explicacion_estudiante:
-        'Es como subir al balcón más alto del Polo Sur: casi nunca te tapan la luz otras montañas y justo debajo hay un cráter oscuro lleno de hielo natural.',
-      descripcion_prof:
-        'Cresta topográfica a +2.150 m en el borde de Shackleton (89.78°S). Baja obstrucción de horizonte solar y acceso inmediato a la trampa criogénica PSR.',
+      descripcion: 'Cresta solar casi continua junto a cráter con hielo.',
+      explicacion_estudiante: 'Mirador alto con Sol casi todo el mes y hielo cerca.',
+      descripcion_prof: 'Cresta +2.150 m (89.78°S). Horizonte despejado y trampa PSR adyacente.',
     },
     {
       id: 'malapert_massif',
@@ -3926,11 +4131,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: 0.0,
       y_mapa_m: 122800.0,
       altitud_m: 4850.0,
-      descripcion: 'Cumbre polar de casi 5 km con línea de visión directa permanente hacia la Tierra (DTE).',
-      explicacion_estudiante:
-        'Una montaña gigante de casi 5 km de altura mirando hacia nuestro planeta: desde su cima la Tierra nunca se esconde y puedes hablar con casa sin cortes.',
-      descripcion_prof:
-        'Cumbre dominante de +4.850 m en el meridiano central (0°E). Garantiza línea de vista Direct-to-Earth (DTE) permanente por encima de la libración lunar.',
+      descripcion: 'Cumbre de ~5 km con visión directa continua hacia la Tierra.',
+      explicacion_estudiante: 'Montaña muy alta desde donde siempre se ve la Tierra.',
+      descripcion_prof: 'Cumbre +4.850 m (0°E). Enlace Direct-to-Earth (DTE) permanente.',
     },
     {
       id: 'connecting_ridge',
@@ -3944,11 +4147,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: -11150.0,
       y_mapa_m: -12380.0,
       altitud_m: 2400.0,
-      descripcion: 'Puente topográfico polar con una de las mayores medias anuales de luz solar de la Luna.',
-      explicacion_estudiante:
-        'Un camino elevado que une dos grandes cráteres del Polo Sur. Al estar tan alto, el Sol lo ilumina durante semanas seguidas.',
-      descripcion_prof:
-        'Cordillera inter-cráter a +2.400 m entre Shackleton y de Gerlache. Máxima disponibilidad anual de irradiancia rasante para arrays fotovoltaicos verticales.',
+      descripcion: 'Cresta elevada con alta iluminación solar anual.',
+      explicacion_estudiante: 'Camino alto entre cráteres con Sol durante semanas.',
+      descripcion_prof: 'Cordillera inter-cráter +2.400 m. Máxima irradiancia rasante.',
     },
     {
       id: 'shoemaker_rim',
@@ -3962,11 +4163,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: 40700.0,
       y_mapa_m: 40700.0,
       altitud_m: 1680.0,
-      descripcion: 'Anillo polar elevado con acceso directo a regiones permanentemente sombreadas ricas en hielo.',
-      explicacion_estudiante:
-        'Un borde tranquilo y seguro rodeado de cráteres oscuros donde los satélites de la NASA han detectado grandes reservas de agua congelada.',
-      descripcion_prof:
-        'Borde elevado (+1.680 m) adyacente al fondo PSR de Shoemaker, donde Lunar Prospector y LEND midieron altas concentraciones de hidrógeno.',
+      descripcion: 'Borde polar elevado junto a depósitos de hielo en sombra.',
+      explicacion_estudiante: 'Borde tranquilo junto a cráteres oscuros con agua helada.',
+      descripcion_prof: 'Borde +1.680 m adyacente a PSR de Shoemaker (alta señal H₂).',
     },
     {
       id: 'haworth_plateau',
@@ -3980,11 +4179,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: -16000.0,
       y_mapa_m: 75600.0,
       altitud_m: 1890.0,
-      descripcion: 'Meseta polar estable junto a una de las trampas criogénicas más antiguas del Polo Sur.',
-      explicacion_estudiante:
-        'Una meseta alta y llana que sirve de mirador hacia uno de los cráteres más fríos de todo el Sistema Solar (-240 °C).',
-      descripcion_prof:
-        'Altiplanicie polar (+1.890 m) en el sector occidental del Polo Sur, óptima para operaciones de rovers hacia trampas frías extremas (<40 K).',
+      descripcion: 'Meseta estable junto a una trampa criogénica polar.',
+      explicacion_estudiante: 'Meseta llana junto a un cráter muy frío (-240 °C).',
+      descripcion_prof: 'Altiplanicie +1.890 m apta para rovers hacia trampas <40 K.',
     },
     {
       id: 'leibnitz_beta',
@@ -3998,11 +4195,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: 73800.0,
       y_mapa_m: 118100.0,
       altitud_m: 3920.0,
-      descripcion: 'Altiplano amplio del Polo Sur a gran altitud, excelente para granjas solares y aterrizajes.',
-      explicacion_estudiante:
-        'Una llanura enorme, alta y despejada sin cuestas peligrosas: el lugar más cómodo para aterrizar con una nave grande y extender paneles solares.',
-      descripcion_prof:
-        'Meseta elevada a +3.920 m con excelente visibilidad DTE y amplias zonas de baja pendiente (<5°) para descenso HLS y plantas solares.',
+      descripcion: 'Altiplano amplio y elevado, ideal para aterrizajes y paneles.',
+      explicacion_estudiante: 'Llanura alta y plana muy fácil para aterrizar.',
+      descripcion_prof: 'Meseta +3.920 m, baja pendiente (<5°) y buena vista DTE.',
     },
     {
       id: 'cabeus_crater',
@@ -4016,11 +4211,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: -89800.0,
       y_mapa_m: 125800.0,
       altitud_m: -1200.0,
-      descripcion: 'Cráter del Polo Sur donde la sonda LCROSS de la NASA confirmó empíricamente agua helada.',
-      explicacion_estudiante:
-        '¡Aquí la NASA demostró que hay agua en la Luna! Es un cráter profundo y muy frío donde una sonda espacial levantó una nube llena de cristales de hielo.',
-      descripcion_prof:
-        'Depresión criogénica a -1.200 m donde la misión LCROSS confirmó un 5.6% en masa de hielo de agua en el regolito. Exige baterías de alta capacidad y enlace relé.',
+      descripcion: 'Cráter con agua helada confirmada por la sonda LCROSS.',
+      explicacion_estudiante: 'Cráter frío y oscuro donde la NASA confirmó agua real.',
+      descripcion_prof: 'Cuenca -1.200 m (5.6% H₂O LCROSS). Requiere enlace relé y baterías.',
     },
     {
       id: 'nobile_viper',
@@ -4034,11 +4227,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       x_mapa_m: 119400.0,
       y_mapa_m: 83600.0,
       altitud_m: 1950.0,
-      descripcion: 'Colinas iluminadas del Polo Sur seleccionadas por la NASA para el rover buscador de hielo VIPER.',
-      explicacion_estudiante:
-        'Unas colinas suaves e iluminadas elegidas por la NASA para que los robots con ruedas y taladros busquen hielo escondido bajo la arena.',
-      descripcion_prof:
-        'Colinas polares (+1.950 m) en el borde de Nobile seleccionadas para prospección robótica de volátiles superficiales con buena ventana solar y DTE.',
+      descripcion: 'Colinas seleccionadas por la NASA para el rover VIPER.',
+      explicacion_estudiante: 'Colinas suaves elegidas para robots buscadores de hielo.',
+      descripcion_prof: 'Colinas +1.950 m en borde de Nobile para prospección robótica.',
     },
   ];
 
@@ -4078,6 +4269,8 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
     hoverGraficaIdx: null,
     servidorCppActivo: false,
     daltonismoActivo: false,
+    zoomLupaPct: 100,
+    textosOriginalesAutismo: new WeakMap(),
     ultimaBusqueda: null,
     ultimaComparacion: null,
   };
@@ -4296,7 +4489,61 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
     thCompNombreA: document.getElementById('thCompNombreA'),
     thCompNombreB: document.getElementById('thCompNombreB'),
     tbodyComparador: document.getElementById('tbodyComparador'),
+
+    appZoomRoot: document.getElementById('appZoomRoot'),
+    rngLupaContinua: document.getElementById('rngLupaContinua'),
+    lblLupaContinua: document.getElementById('lblLupaContinua'),
+    btnLupaMenos: document.getElementById('btnLupaMenos'),
+    btnLupaMas: document.getElementById('btnLupaMas'),
+    btnLupaReset: document.getElementById('btnLupaReset'),
+    lupaFloatingBar: document.getElementById('lupaFloatingBar'),
+    rngLupaFlotante: document.getElementById('rngLupaFlotante'),
+    lblLupaFlotante: document.getElementById('lblLupaFlotante'),
+    btnLupaFlotanteReset: document.getElementById('btnLupaFlotanteReset'),
   };
+
+  function aplicarZoomLupa(pct) {
+    const val = Math.min(200, Math.max(100, Math.round(pct)));
+    state.zoomLupaPct = val;
+    if (els.appZoomRoot) {
+      els.appZoomRoot.style.zoom = `${val}%`;
+    }
+    if (els.rngLupaContinua) els.rngLupaContinua.value = String(val);
+    if (els.lblLupaContinua) els.lblLupaContinua.textContent = `${val}%`;
+    if (els.rngLupaFlotante) els.rngLupaFlotante.value = String(val);
+    if (els.lblLupaFlotante) els.lblLupaFlotante.textContent = `Lupa: ${val}%`;
+    if (els.lupaFloatingBar) {
+      els.lupaFloatingBar.classList.toggle('visible', val > 100);
+    }
+  }
+
+  function quitarEmojisTexto(txt) {
+    return txt
+      .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/^\s+|\s+$/g, (m) => (m.includes('\n') ? m : ''));
+  }
+
+  function aplicarLimpiezaAutismo(activo) {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    let nodo;
+    while ((nodo = walker.nextNode())) {
+      const parent = nodo.parentElement;
+      if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') continue;
+      if (activo) {
+        if (!state.textosOriginalesAutismo.has(nodo)) {
+          state.textosOriginalesAutismo.set(nodo, nodo.nodeValue);
+        }
+        const orig = state.textosOriginalesAutismo.get(nodo);
+        const limpio = quitarEmojisTexto(orig);
+        if (nodo.nodeValue !== limpio) {
+          nodo.nodeValue = limpio;
+        }
+      } else if (state.textosOriginalesAutismo.has(nodo)) {
+        nodo.nodeValue = state.textosOriginalesAutismo.get(nodo);
+      }
+    }
+  }
 
   function obtenerNombrePuntoSegunModo(idPunto, nombreFallback) {
     const ref = CATALOGO_RESPALDO.find((x) => x.id === idPunto);
@@ -5346,6 +5593,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
     sincronizarInputsPuntoSeleccionado();
     ejecutarBusqueda();
     ejecutarComparacion();
+    if (document.body.classList.contains('modo-autismo')) {
+      aplicarLimpiezaAutismo(true);
+    }
   }
 
   function leerFiltrosActuales() {
@@ -6427,6 +6677,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
 
       els.listaOfertasBooking.appendChild(card);
     });
+    if (document.body.classList.contains('modo-autismo')) {
+      aplicarLimpiezaAutismo(true);
+    }
   }
 
   function scrollAResultadosSiInteractivo(debeHacerScroll) {
@@ -6661,6 +6914,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       `;
       els.tbodyComparador.appendChild(tr);
     });
+    if (document.body.classList.contains('modo-autismo')) {
+      aplicarLimpiezaAutismo(true);
+    }
   }
 
   async function ejecutarComparacion() {
@@ -6846,7 +7102,9 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       if (b) b.addEventListener('click', () => aplicarNivelConocimiento('profesional'));
     });
 
-    toggleModoClase(els.btnModoAutismo, 'modo-autismo');
+    toggleModoClase(els.btnModoAutismo, 'modo-autismo', (activo) => {
+      aplicarLimpiezaAutismo(activo);
+    });
     toggleModoClase(els.btnModoTdah, 'modo-tdah');
     toggleModoClase(els.btnModoDislexia, 'modo-dislexia');
     toggleModoClase(els.btnModoBajaVision, 'modo-baja-vision');
@@ -6856,6 +7114,33 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
       state.daltonismoActivo = activo;
       if (state.ultimaBusqueda) renderResultadoBusqueda(state.ultimaBusqueda);
     });
+
+    if (els.rngLupaContinua) {
+      els.rngLupaContinua.addEventListener('input', (e) => {
+        aplicarZoomLupa(e.target.value);
+      });
+    }
+    if (els.rngLupaFlotante) {
+      els.rngLupaFlotante.addEventListener('input', (e) => {
+        aplicarZoomLupa(e.target.value);
+      });
+    }
+    if (els.btnLupaMenos) {
+      els.btnLupaMenos.addEventListener('click', () => {
+        aplicarZoomLupa((state.zoomLupaPct || 100) - 5);
+      });
+    }
+    if (els.btnLupaMas) {
+      els.btnLupaMas.addEventListener('click', () => {
+        aplicarZoomLupa((state.zoomLupaPct || 100) + 5);
+      });
+    }
+    if (els.btnLupaReset) {
+      els.btnLupaReset.addEventListener('click', () => aplicarZoomLupa(100));
+    }
+    if (els.btnLupaFlotanteReset) {
+      els.btnLupaFlotanteReset.addEventListener('click', () => aplicarZoomLupa(100));
+    }
 
     if (els.btnResetA11y) {
       els.btnResetA11y.addEventListener('click', () => {
@@ -6869,6 +7154,8 @@ body.modo-fotofobia .bridge-concept-box .pro-ref {
           'modo-fotofobia'
         );
         state.daltonismoActivo = false;
+        aplicarLimpiezaAutismo(false);
+        aplicarZoomLupa(100);
         [
           els.btnModoAutismo,
           els.btnModoTdah,

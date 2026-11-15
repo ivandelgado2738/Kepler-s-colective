@@ -2383,8 +2383,131 @@ body.nivel-profesional .prof-telemetry-strip {
 }
 
 /* ============================================================================
-   ADAPTACIONES FÍSICAS, VISUALES Y COGNITIVAS
+   ALINEACIÓN UNIFORME EN TODOS LOS MODOS + ADAPTACIONES FÍSICAS Y COGNITIVAS
    ============================================================================ */
+.search-grid-centered,
+.metrics-grid-4,
+.prof-telemetry-grid,
+.adaptations-grid,
+.student-pillars,
+.curiosidades-grid,
+.top-fechas-grid,
+.bridge-concepts-grid,
+.booking-card {
+  align-items: stretch;
+}
+
+.search-cell,
+.metric-tile,
+.prof-kpi,
+.adaptation-category-card,
+.student-pillar,
+.curiosidad-card,
+.top-fecha-chip,
+.bridge-concept-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.adaptation-category-card,
+.student-pillar {
+  height: 100%;
+  justify-content: flex-start;
+}
+
+.a11y-btn-stack {
+  margin-top: auto;
+}
+
+/* Lupa Continua (Zoom 100% - 200% + Barra flotante de control rápido) */
+.lupa-control-box {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lupa-control-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nasa-navy);
+}
+
+.lupa-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lupa-slider-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--nasa-blue);
+  cursor: pointer;
+}
+
+.lupa-mini-btn {
+  border: 1px solid var(--border-soft);
+  background-color: var(--bg-card);
+  color: var(--nasa-navy);
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.lupa-mini-btn:hover {
+  border-color: var(--nasa-blue);
+  background-color: var(--nasa-ice);
+}
+
+#lupaFloatingBar {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  background-color: var(--nasa-navy);
+  color: var(--nasa-white);
+  border: 2px solid var(--nasa-red);
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: var(--shadow-float);
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#lupaFloatingBar.visible {
+  display: flex;
+}
+
+#lupaFloatingBar input[type="range"] {
+  width: 110px;
+  accent-color: var(--nasa-red);
+  cursor: pointer;
+}
+
+#lupaFloatingBar button {
+  background-color: var(--nasa-red);
+  color: var(--nasa-white);
+  border: none;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* MODO AUTISMO / TEA: Alineación estricta, sin emojis, sin animaciones y menos texto */
 body.modo-autismo,
 body.modo-autismo * {
   transition: none !important;
@@ -2394,6 +2517,33 @@ body.modo-autismo * {
 
 body.modo-autismo .literal-tag {
   display: inline-block;
+}
+
+body.modo-autismo .kid-desc-box,
+body.modo-autismo .filter-hint,
+body.modo-autismo .human-guide-banner,
+body.modo-autismo .agency-trust-pills,
+body.modo-autismo .student-pillar .pillar-example {
+  display: none !important;
+}
+
+body.modo-autismo .featured-result-card,
+body.modo-autismo .booking-card,
+body.modo-autismo .curiosidad-card,
+body.modo-autismo .filter-box,
+body.modo-autismo .booking-search-card {
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+  text-align: left !important;
+}
+
+body.modo-autismo .section-heading {
+  text-align: left;
+  margin-left: 0;
+}
+
+body.modo-autismo .curiosidades-filter-bar {
+  justify-content: flex-start;
 }
 
 #tdahFocusBar {
@@ -2439,11 +2589,56 @@ body.modo-tdah .featured-result-card {
   outline: 2.5px solid var(--nasa-science-blue);
 }
 
+/* MODO DISLEXIA + DISCALCULIA NUMÉRICA: Atkinson Hyperlegible + números grandes tabulares */
 body.modo-dislexia {
-  font-family: 'Verdana', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --font-num-dislexia: 'Atkinson Hyperlegible', 'Verdana', 'Tahoma', sans-serif;
+  font-family: 'Atkinson Hyperlegible', 'Verdana', 'Trebuchet MS', sans-serif;
   letter-spacing: 0.05em;
   word-spacing: 0.12em;
   line-height: 1.8;
+}
+
+body.modo-dislexia .score-number,
+body.modo-dislexia .metric-tile strong,
+body.modo-dislexia .prof-kpi strong,
+body.modo-dislexia .coords-pill,
+body.modo-dislexia .filter-row-head strong,
+body.modo-dislexia .bar-row strong,
+body.modo-dislexia .best-dates-mini,
+body.modo-dislexia .bridge-concept-box code,
+body.modo-dislexia .vector-3d-readout,
+body.modo-dislexia .chart-hover-bar,
+body.modo-dislexia input[type="number"],
+body.modo-dislexia input[type="datetime-local"],
+body.modo-dislexia .top-fecha-chip strong {
+  font-family: var(--font-num-dislexia) !important;
+  font-variant-numeric: tabular-nums slashed-zero !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 800 !important;
+}
+
+body.modo-dislexia .score-number {
+  font-size: 32px !important;
+  padding: 8px 14px !important;
+}
+
+body.modo-dislexia .metric-tile strong,
+body.modo-dislexia .prof-kpi strong {
+  font-size: 22px !important;
+}
+
+body.modo-dislexia input[type="number"],
+body.modo-dislexia input[type="datetime-local"],
+body.modo-dislexia .filter-row-head strong,
+body.modo-dislexia .bar-row strong {
+  font-size: 17px !important;
+}
+
+body.modo-dislexia .coords-pill,
+body.modo-dislexia .bridge-concept-box code,
+body.modo-dislexia .vector-3d-readout,
+body.modo-dislexia .best-dates-mini {
+  font-size: 14.5px !important;
 }
 
 body.modo-baja-vision {
