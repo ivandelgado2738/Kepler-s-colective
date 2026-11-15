@@ -5,7 +5,3 @@
 *.pdb
 __pycache__/
 .vscode/
-
-# Convertidor local (mantener solo en el portatil, no subir a GitHub)
-Preparar_Para_GitHub.py
-Convertir_Para_GitHub.bat
