@@ -19,6 +19,12 @@ float vectorNorm(Vector3D v);
 
 float vectorDotProduct(Vector3D v1, Vector3D v2);
 
+Vector3D vectorAddition(Vector3D v1, Vector3D v2);
+
+Vector3D vectorSubstraction(Vector3D v1, Vector3D v2);
+
+Vector3D productByScalar(Vector3D v, float scalar);
+
 Vector3D vectorCrossProduct(Vector3D v1, Vector3D v2);
 
 Vector3D normalize(Vector3D v);
@@ -35,3 +41,7 @@ int sign(float f);
 float signedTetrahedronVolume (Vector3D v, Triangle t);
 
 bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t);
+
+Vector3D cartesianToSpherical(Vector3D v);
+
+Vector3D sphericalToCartesian(Vector3D v);

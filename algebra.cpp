@@ -9,6 +9,19 @@ float vectorDotProduct(Vector3D v1, Vector3D v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 };
 
+Vector3D vectorAddition(Vector3D v1, Vector3D v2) {
+    return {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
+};
+
+
+Vector3D vectorSubstraction(Vector3D v1, Vector3D v2) {
+    return {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
+};
+
+Vector3D productByScalar(Vector3D v, float scalar) {
+    return {v.x * scalar, v.y * scalar, v.z * scalar};
+};
+
 Vector3D vectorCrossProduct(Vector3D v1, Vector3D v2) {
     return {v1.y * v2.z - v1.z * v2.y,
             v1.z * v2.x - v1.x * v2.z,
@@ -81,4 +94,16 @@ bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
     else return false;
 };
 
+Vector3D cartesianToSpherical(Vector3D v) {
+    float r = vectorNorm(v);
+    float theta = acos(v.z / r); // polar angle (rad)
+    float phi = atan2(v.y, v.x); // azimuthal angle (rad)
+    return {r, theta, phi};
+};
 
+Vector3D sphericalToCartesian(Vector3D v) {
+    float r = v.x;
+    float theta = v.y; // polar angle (rad)
+    float phi = v.z; // azimuthal angle (rad)
+    return {r * sin(theta) * cos(phi), r * sin(theta) * sin(phi), r * cos(theta)};
+};
