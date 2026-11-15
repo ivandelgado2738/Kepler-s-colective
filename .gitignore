@@ -1,0 +1,7 @@
+# Binarios compilados y temporales locales
+*.exe
+*.o
+*.obj
+*.pdb
+__pycache__/
+.vscode/
