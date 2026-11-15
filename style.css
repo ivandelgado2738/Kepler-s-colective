@@ -2820,3 +2820,79 @@ body.modo-fotofobia.modo-tdah .tdah-kw {
   pointer-events: none;
   will-change: transform;
 }
+
+/* ============================================================================
+   PANEL DE ADAPTACIONES LATERAL FIJO A LA IZQUIERDA (Siempre accesible)
+   ============================================================================ */
+.a11y-drawer-wrapper {
+  position: fixed;
+  top: 72px;
+  left: 12px;
+  z-index: 9500;
+  width: auto;
+  max-width: calc(100vw - 24px);
+  margin: 0;
+  padding: 0;
+}
+
+#panelAdaptaciones {
+  background-color: var(--bg-card);
+  border: 2px solid var(--nasa-navy);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  width: auto;
+}
+
+#panelAdaptaciones > summary {
+  padding: 9px 14px;
+  font-size: 12.5px;
+  gap: 8px;
+}
+
+#panelAdaptaciones:not([open]) > summary .summary-left span:last-child {
+  display: none;
+}
+
+#panelAdaptaciones:not([open]) > summary::after {
+  content: "Adaptaciones";
+  font-weight: 800;
+  color: var(--nasa-navy);
+  font-size: 12.5px;
+}
+
+body.modo-fotofobia #panelAdaptaciones:not([open]) > summary::after {
+  color: var(--nasa-white);
+}
+
+#panelAdaptaciones:not([open]) > summary .summary-toggle-pill {
+  display: none;
+}
+
+#panelAdaptaciones[open] {
+  width: 345px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}
+
+#panelAdaptaciones[open] .drawer-body {
+  padding: 12px 14px 16px;
+}
+
+#panelAdaptaciones .adaptations-grid {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .a11y-drawer-wrapper {
+    top: auto;
+    bottom: 12px;
+    left: 10px;
+  }
+  #panelAdaptaciones[open] {
+    max-height: 70vh;
+    width: calc(100vw - 20px);
+  }
+}

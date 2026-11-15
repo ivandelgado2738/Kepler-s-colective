@@ -591,11 +591,33 @@
 
   function reconstruirClonLupaCursor() {
     if (!state.lupaCursorActiva || !els.appZoomRoot || !els.cursorMagnifierContent) return;
+    const zoomGen = (state.zoomLupaPct || 100) / 100;
+    const rootRect = els.appZoomRoot.getBoundingClientRect();
+
     const clon = els.appZoomRoot.cloneNode(true);
     clon.removeAttribute('id');
     clon.style.zoom = '100%';
     clon.style.width = `${els.appZoomRoot.offsetWidth}px`;
     clon.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
+    // Sincronizar posición exacta de elementos fijos dentro de appZoomRoot (como el panel izquierdo de adaptaciones)
+    const origWrapper = els.appZoomRoot.querySelector('.a11y-drawer-wrapper');
+    const clonWrapper = clon.querySelector('.a11y-drawer-wrapper');
+    if (origWrapper && clonWrapper) {
+      const wRect = origWrapper.getBoundingClientRect();
+      clonWrapper.style.position = 'absolute';
+      clonWrapper.style.left = `${(wRect.left - rootRect.left) / zoomGen}px`;
+      clonWrapper.style.top = `${(wRect.top - rootRect.top) / zoomGen}px`;
+      clonWrapper.style.right = 'auto';
+      clonWrapper.style.bottom = 'auto';
+      clonWrapper.style.margin = '0';
+    }
+
+    const origPanel = els.panelAdaptaciones;
+    const clonPanel = clon.querySelector('.expandable-drawer');
+    if (origPanel && clonPanel && origPanel.open) {
+      clonPanel.scrollTop = origPanel.scrollTop;
+    }
 
     const origInputs = els.appZoomRoot.querySelectorAll('input, select, textarea');
     const clonInputs = clon.querySelectorAll('input, select, textarea');
@@ -622,6 +644,22 @@
 
     els.cursorMagnifierContent.innerHTML = '';
     els.cursorMagnifierContent.appendChild(clon);
+    if (origPanel && clonPanel && origPanel.open) {
+      clonPanel.scrollTop = origPanel.scrollTop;
+    }
+  }
+
+  let cursorSyncRaf = null;
+  function programarSyncLupaCursor() {
+    if (!state.lupaCursorActiva) return;
+    if (cursorSyncRaf) cancelAnimationFrame(cursorSyncRaf);
+    cursorSyncRaf = requestAnimationFrame(() => {
+      cursorSyncRaf = null;
+      reconstruirClonLupaCursor();
+      if (state.ultimoCursorPos) {
+        actualizarPosicionLupaCursor(state.ultimoCursorPos.x, state.ultimoCursorPos.y);
+      }
+    });
   }
 
   function actualizarPosicionLupaCursor(clientX, clientY) {
@@ -3138,9 +3176,32 @@
     if (els.btnToggleAdaptaciones && els.panelAdaptaciones) {
       els.btnToggleAdaptaciones.addEventListener('click', () => {
         els.panelAdaptaciones.open = !els.panelAdaptaciones.open;
-        if (els.panelAdaptaciones.open) {
-          els.panelAdaptaciones.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        programarSyncLupaCursor();
+      });
+    }
+
+    if (els.panelAdaptaciones) {
+      els.panelAdaptaciones.addEventListener('toggle', () => {
+        programarSyncLupaCursor();
+      });
+      els.panelAdaptaciones.addEventListener('scroll', () => {
+        programarSyncLupaCursor();
+      }, { passive: true });
+    }
+
+    document.addEventListener('toggle', () => {
+      programarSyncLupaCursor();
+    }, true);
+
+    if (els.appZoomRoot && typeof MutationObserver !== 'undefined') {
+      const lupaObserver = new MutationObserver(() => {
+        programarSyncLupaCursor();
+      });
+      lupaObserver.observe(els.appZoomRoot, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['open', 'hidden', 'class', 'style'],
       });
     }
 
@@ -3340,8 +3401,8 @@
     });
 
     window.addEventListener('scroll', () => {
-      if (state.lupaCursorActiva && state.ultimoCursorPos) {
-        actualizarPosicionLupaCursor(state.ultimoCursorPos.x, state.ultimoCursorPos.y);
+      if (state.lupaCursorActiva) {
+        programarSyncLupaCursor();
       }
     }, { passive: true });
 
