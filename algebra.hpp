@@ -1,10 +1,9 @@
 #include <math.h>
-struct Vector3D {
-    float x, y, z;
-};
+#include <vector>
+#include "lunar_dem.hpp"
 
 struct Triangle {
-    Vector3D v1, v2, v3;
+    lunar::Vec3 v1, v2, v3;
 };
 
 struct Matrix3x3 {
@@ -15,33 +14,35 @@ struct Matrix4x4 {
     float m[4][4];
 };
 
-float vectorNorm(Vector3D v);
+float vectorNorm(lunar::Vec3 v);
 
-float vectorDotProduct(Vector3D v1, Vector3D v2);
+float vectorDotProduct(lunar::Vec3 v1, lunar::Vec3 v2);
 
-Vector3D vectorAddition(Vector3D v1, Vector3D v2);
+lunar::Vec3 vectorAddition(lunar::Vec3 v1, lunar::Vec3 v2);
 
-Vector3D vectorSubstraction(Vector3D v1, Vector3D v2);
+lunar::Vec3 vectorSubstraction(lunar::Vec3 v1, lunar::Vec3 v2);
 
-Vector3D productByScalar(Vector3D v, float scalar);
+lunar::Vec3 productByScalar(lunar::Vec3 v, float scalar);
 
-Vector3D vectorCrossProduct(Vector3D v1, Vector3D v2);
+lunar::Vec3 vectorCrossProduct(lunar::Vec3 v1, lunar::Vec3 v2);
 
-Vector3D normalize(Vector3D v);
+lunar::Vec3 normalize(lunar::Vec3 v);
 
 
 float determinant3x3(Matrix3x3 m);
 
 float determinant4x4(Matrix4x4 m);
 
-Vector3D normalVectorTriangle(Triangle t);
+lunar::Vec3 normalVectorTriangle(Triangle t);
 
 int sign(float f);
 
-float signedTetrahedronVolume (Vector3D v, Triangle t);
+float signedTetrahedronVolume (lunar::Vec3 v, Triangle t);
 
-bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t);
+bool intersectsTriangle(lunar::Vec3 Q1, lunar::Vec3 Q2, Triangle t);
 
-Vector3D cartesianToSpherical(Vector3D v);
+lunar::Vec3 cartesianToSpherical(lunar::Vec3 v);
 
-Vector3D sphericalToCartesian(Vector3D v);
+lunar::Vec3 sphericalToCartesian(lunar::Vec3 v);
+
+lunar::Vec3 latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude);

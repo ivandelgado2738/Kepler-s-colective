@@ -1,34 +1,34 @@
 #include <math.h>
 #include "algebra.hpp"
 
-float vectorNorm(Vector3D v) {
+float vectorNorm(lunar::Vec3 v) {
     return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 };
 
-float vectorDotProduct(Vector3D v1, Vector3D v2) {
+float vectorDotProduct(lunar::Vec3 v1, lunar::Vec3 v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 };
 
-Vector3D vectorAddition(Vector3D v1, Vector3D v2) {
+lunar::Vec3 vectorAddition(lunar::Vec3 v1, lunar::Vec3 v2) {
     return {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
 };
 
 
-Vector3D vectorSubstraction(Vector3D v1, Vector3D v2) {
+lunar::Vec3 vectorSubstraction(lunar::Vec3 v1, lunar::Vec3 v2) {
     return {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
 };
 
-Vector3D productByScalar(Vector3D v, float scalar) {
+lunar::Vec3 productByScalar(lunar::Vec3 v, float scalar) {
     return {v.x * scalar, v.y * scalar, v.z * scalar};
 };
 
-Vector3D vectorCrossProduct(Vector3D v1, Vector3D v2) {
+lunar::Vec3 vectorCrossProduct(lunar::Vec3 v1, lunar::Vec3 v2) {
     return {v1.y * v2.z - v1.z * v2.y,
             v1.z * v2.x - v1.x * v2.z,
             v1.x * v2.y - v1.y * v2.x};
 };
 
-Vector3D normalize(Vector3D v) {
+lunar::Vec3 normalize(lunar::Vec3 v) {
     float norm = vectorNorm(v);
     return {v.x / norm, v.y / norm, v.z / norm};
 };
@@ -57,10 +57,10 @@ float determinant4x4(Matrix4x4 m) {
     return det;
 };
 
-Vector3D normalVectorTriangle(Triangle t) {
-    Vector3D edge1 = {t.v2.x - t.v1.x, t.v2.y - t.v1.y, t.v2.z - t.v1.z};
-    Vector3D edge2 = {t.v3.x - t.v1.x, t.v3.y - t.v1.y, t.v3.z - t.v1.z};
-    Vector3D normal = vectorCrossProduct(edge1, edge2);
+lunar::Vec3 normalVectorTriangle(Triangle t) {
+    lunar::Vec3 edge1 = {t.v2.x - t.v1.x, t.v2.y - t.v1.y, t.v2.z - t.v1.z};
+    lunar::Vec3 edge2 = {t.v3.x - t.v1.x, t.v3.y - t.v1.y, t.v3.z - t.v1.z};
+    lunar::Vec3 normal = vectorCrossProduct(edge1, edge2);
     return normalize(normal);
 };
 
@@ -70,7 +70,7 @@ int sign(float f){
     return 0;   
 };
 
-float signedTetrahedronVolume (Vector3D v, Triangle t){
+float signedTetrahedronVolume (lunar::Vec3 v, Triangle t){
     Matrix4x4 m;
     m.m[0][0] = v.x; m.m[0][1] = v.y; m.m[0][2] = v.z; m.m[0][3] = 1.0f;
     m.m[1][0] = t.v1.x; m.m[1][1] = t.v1.y; m.m[1][2] = t.v1.z; m.m[1][3] = 1.0f;
@@ -80,7 +80,7 @@ float signedTetrahedronVolume (Vector3D v, Triangle t){
     return determinant4x4(m) / 6.0f;
 };
 
-bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
+bool intersectsTriangle(lunar::Vec3 Q1, lunar::Vec3 Q2,Triangle t) {
     int i,j,k;
     Triangle t1, t2, t3;
     t1 = {t.v1, Q1, t.v2};
@@ -94,16 +94,23 @@ bool intersectsTriangle(Vector3D Q1, Vector3D Q2, Triangle t) {
     else return false;
 };
 
-Vector3D cartesianToSpherical(Vector3D v) {
+lunar::Vec3 cartesianToSpherical(lunar::Vec3 v) {
     float r = vectorNorm(v);
     float theta = acos(v.z / r); // polar angle (rad)
     float phi = atan2(v.y, v.x); // azimuthal angle (rad)
     return {r, theta, phi};
 };
 
-Vector3D sphericalToCartesian(Vector3D v) {
+lunar::Vec3 sphericalToCartesian(lunar::Vec3 v) {
     float r = v.x;
     float theta = v.y; // polar angle (rad)
     float phi = v.z; // azimuthal angle (rad)
     return {r * sin(theta) * cos(phi), r * sin(theta) * sin(phi), r * cos(theta)};
+};
+
+lunar::Vec3 latitudeLongitudeAltitudeToCartesian(float latitude, float longitude, float altitude) {
+    float latRad = latitude * M_PI / 180.0f;
+    float lonRad = longitude * M_PI / 180.0f;
+    float r = 1737.4f + altitude; // Moon's radius in km + altitude
+    return {r * cos(latRad) * cos(lonRad), r * cos(latRad) * sin(lonRad), r * sin(latRad)};
 };

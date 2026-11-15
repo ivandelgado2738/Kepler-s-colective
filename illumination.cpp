@@ -4,11 +4,11 @@
 
 using namespace std;
 
-float illuminationAngle(Vector3D lightDirection, Triangle t) {
+float illuminationAngle(lunar::Vec3 lightDirection, Triangle t) {
     return abs(acos(vectorDotProduct(lightDirection, normalVectorTriangle(t))));
 };
 
-bool intersectsPolyhedron(Vector3D Q1, Vector3D Q2, Triangle polyhedron[], int numTriangles){
+bool intersectsPolyhedron(lunar::Vec3 Q1, lunar::Vec3 Q2, Triangle polyhedron[], int numTriangles){
     for (int i = 0; i < numTriangles; i++) {
         if (intersectsTriangle(Q1, Q2, polyhedron[i])) {
             return true;
@@ -18,11 +18,11 @@ bool intersectsPolyhedron(Vector3D Q1, Vector3D Q2, Triangle polyhedron[], int n
 };
 
 //We assume that polyhedron[0] is the face that the base is standing on
-float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
-    Vector3D lightDirection = normalize({SunPosition.x - MoonPosition.x, SunPosition.y - MoonPosition.y, SunPosition.z - MoonPosition.z});
+float illumination(lunar::Vec3 SunPosition, lunar::Vec3 MoonPosition, Triangle polyhedron[], int numTriangles) {
+    lunar::Vec3 lightDirection = normalize({SunPosition.x - MoonPosition.x, SunPosition.y - MoonPosition.y, SunPosition.z - MoonPosition.z});
     float angle = illuminationAngle(lightDirection, polyhedron[0]);
     // Elevate the MoonPosition slightly along the normal of the triangle to avoid being illuminated by the Sun when it is actually in shadow
-    Vector3D elevatedMoonPosition;
+    lunar::Vec3 elevatedMoonPosition;
     if(sign(vectorDotProduct(normalVectorTriangle(polyhedron[0]), lightDirection)) < 0) {
         elevatedMoonPosition = vectorAddition(MoonPosition, productByScalar(normalVectorTriangle(polyhedron[0]), 0.01f));
     }
@@ -36,7 +36,7 @@ float illumination(Vector3D SunPosition, Vector3D MoonPosition, Triangle polyhed
     }
 };
 
-float communication(Vector3D EarthPosition, Vector3D MoonPosition, Triangle polyhedron[], int numTriangles) {
+float communication(lunar::Vec3 EarthPosition, lunar::Vec3 MoonPosition, Triangle polyhedron[], int numTriangles) {
     if (intersectsPolyhedron(MoonPosition, EarthPosition, polyhedron, numTriangles)) {
         return 0.0f; // Blocked
     } else {
