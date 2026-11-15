@@ -10,8 +10,23 @@
 #define nyears 11
 #define ndaysperyear 365
 #define nrowsperday 96
+//#define MOON_RADIUS 1737.4000
 
 using namespace std;
+
+vector<Triangle> trianglesFromPatch(const lunar::Parche& parche) {
+    vector<Triangle> polyhedron;
+    vector<lunar::Triangulo> triangulos = parche.triangulos();
+    polyhedron.reserve(triangulos.size());
+    for (const lunar::Triangulo& triangulo : triangulos) {
+        polyhedron.push_back({
+            parche.xyz[triangulo.a],
+            parche.xyz[triangulo.b],
+            parche.xyz[triangulo.c]
+        });
+    }
+    return polyhedron;
+};
 
 int main(){
     double lon, lat;
@@ -31,7 +46,7 @@ int main(){
 
     lunar::Vec3 MoonPosition = parche.punto(parche.filas/2, parche.cols/2);
 
-    vector<lunar::Triangulo> triangulos = parche.triangulos();
+    vector<Triangle> triangulos = trianglesFromPatch(parche);
 
     int Ntriangulos = triangulos.size();
 
@@ -46,11 +61,15 @@ int main(){
                &EarthPosition.x, &EarthPosition.y, &EarthPosition.z,
                &SunPosition.x, &SunPosition.y, &SunPosition.z
                );
+            
+            EarthPosition = productByScalar(EarthPosition, 1000.0f);
+            SunPosition = productByScalar(SunPosition, 1000.0f); //We write the coordinates in meters
 
-        double illuminationValue = illumination(SunPosition, MoonPosition, triangulos, Ntriangulos);
-        double communicationValue = communication(EarthPosition, MoonPosition, triangulos, Ntriangulos);
+            double illuminationValue = illumination(SunPosition, MoonPosition, triangulos, Ntriangulos);
+            double communicationValue = communication(EarthPosition, MoonPosition, triangulos, Ntriangulos);
 
-        fprintf(res, "%.2f\t%.6f\t%.1f\n", time, illuminationValue, communicationValue);
+            fprintf(res, "%.2f\t%.6f\t%.1f\n", time, illuminationValue, communicationValue);
+        
     };
 
     fclose(f);
